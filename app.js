@@ -1,18 +1,18 @@
+const e = React.createElement;
 const { useState } = React;
 
-function RisingSunApp() {
-  const [activeTab, setActiveTab] = useState("home");
+function App() {
+  const [tab, setTab] = useState("home");
 
-  return React.createElement(
+  return e(
     "div",
-    { className: "min-h-screen flex items-center justify-center text-center" },
-    React.createElement(
-      "h1",
-      { className: "text-4xl font-bold text-orange-600" },
-      "Rising Sun Services"
+    { className: "min-h-screen flex flex-col items-center justify-center bg-orange-50 text-center" },
+    e("h1", { className: "text-4xl font-bold text-orange-600 mb-4" }, "Rising Sun Services"),
+    e("p", { className: "text-gray-600 max-w-xl" },
+      "Consulting, Technology & Automotive Solutions from Japan."
     )
   );
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(React.createElement(RisingSunApp));
+root.render(e(App));
