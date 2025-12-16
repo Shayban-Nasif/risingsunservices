@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Rising Sun Services</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+    <meta charset="UTF-8" />
+    <title>Rising Sun Services</title>
 
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Mobile friendly -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="./style.css" />
-</head>
-<body class="bg-white">
+    <!-- Tailwind CDN (IMPORTANT) -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- React Root -->
-  <div id="root"></div>
+    <!-- React + ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
 
-  <!-- React + ReactDOM -->
-  <script type="module">
-    import React from "https://esm.sh/react@18";
-    import ReactDOM from "https://esm.sh/react-dom@18/client";
-    import RisingSunApp from "./app.jsx";
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    const root = ReactDOM.createRoot(document.getElementById("root"));
-    root.render(React.createElement(RisingSunApp));
-  </script>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
 
-</body>
+  <body>
+    <!-- React mounts here -->
+    <div id="root"></div>
+
+    <!-- Load JSX -->
+    <script type="text/babel" src="./app.jsx"></script>
+  </body>
 </html>
