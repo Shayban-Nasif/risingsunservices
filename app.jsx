@@ -269,3 +269,6 @@ const RisingSunApp = () => {
 };
 
 export default RisingSunApp;
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<RisingSunApp />);
