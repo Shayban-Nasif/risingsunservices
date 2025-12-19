@@ -70,31 +70,87 @@ function App() {
         ),
 
       /* ABOUT */
-      tab === "about" &&
-        e(
-          "section",
-          { className: "max-w-4xl mx-auto px-6 py-16 text-center" },
-          e("h2", { className: "text-3xl font-bold mb-6" }, "About Us"),
-          e(
-            "p",
-            { className: "text-gray-600 text-lg mb-6" },
-            "Rising Sun Services is a consumer-focused venture delivering professional services backed by strong corporate governance."
+tab === "about" &&
+  e(
+    "section",
+    { className: "max-w-5xl mx-auto px-6 py-16" },
+
+    e("h2", { className: "text-3xl font-bold mb-10 text-center" }, "About Us / ブランド概要"),
+
+    e(
+      "div",
+      { className: "overflow-hidden border rounded-xl" },
+
+      e(
+        "table",
+        { className: "w-full text-left border-collapse text-sm md:text-base" },
+        e("tbody", null,
+
+          e("tr", { className: "border-b" },
+            e("th", { className: "w-1/3 bg-gray-100 px-6 py-4 font-medium" }, "ブランド名"),
+            e("td", { className: "px-6 py-4" }, "Rising Sun Services")
           ),
-          e(
-            "p",
-            { className: "text-gray-500" },
-            "A venture of ",
+
+          e("tr", { className: "border-b" },
+            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "位置づけ"),
+            e("td", { className: "px-6 py-4" }, "Asdiqa Co. Ltd. のコンシューマーブランド")
+          ),
+
+          e("tr", { className: "border-b" },
+            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "運営会社"),
             e(
-              "a",
-              {
-                href: "https://asdiqa.jp",
-                className: "text-orange-600 font-semibold hover:underline",
-                target: "_blank",
-              },
-              "Asdiqa Co. Ltd."
+              "td",
+              { className: "px-6 py-4" },
+              e(
+                "a",
+                {
+                  href: "https://asdiqa.jp",
+                  target: "_blank",
+                  className: "text-orange-600 font-semibold hover:underline",
+                },
+                "Asdiqa Co. Ltd.（アスディカ―株式会社）"
+              )
+            )
+          ),
+
+          e("tr", { className: "border-b" },
+            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "主なサービス"),
+            e(
+              "td",
+              { className: "px-6 py-4 space-y-1" },
+              e("div", null, "・ビジネスコンサルティング"),
+              e("div", null, "・ソフトウェア開発・IT支援"),
+              e("div", null, "・自動車関連サービス"),
+              e("div", null, "・技術教育・サポート")
+            )
+          ),
+
+          e("tr", { className: "border-b" },
+            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "提供地域"),
+            e("td", { className: "px-6 py-4" }, "日本国内および海外")
+          ),
+
+          e("tr", null,
+            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "ウェブサイト"),
+            e(
+              "td",
+              { className: "px-6 py-4" },
+              e(
+                "a",
+                {
+                  href: "https://risingsunservices.jp",
+                  target: "_blank",
+                  className: "text-orange-600 font-semibold hover:underline",
+                },
+                "www.risingsunservices.jp"
+              )
             )
           )
-        ),
+
+        )
+      )
+    )
+  ),
 
       /* TEAM */
       tab === "team" &&
