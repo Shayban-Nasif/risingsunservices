@@ -114,6 +114,24 @@ tab === "about" &&
           ),
 
           e("tr", { className: "border-b" },
+            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "事務所"),
+            e(
+              "td",
+              { className: "px-6 py-4 space-y-1" },
+              e("div", null, "〒124-0005 東京都葛飾区宝町２丁目３４−２８号山田ビル３０３"),
+            )
+          ),
+
+          e("tr", { className: "border-b" },
+            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "所在地"),
+            e(
+              "td",
+              { className: "px-6 py-4 space-y-1" },
+              e("div", null, "東京都葛飾区お花茶屋二丁目2-20-107号"),
+            )
+          ),
+          
+          e("tr", { className: "border-b" },
             e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "主なサービス"),
             e(
               "td",
