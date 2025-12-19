@@ -69,88 +69,78 @@ function App() {
           )
         ),
 
-      /* ABOUT */
-tab === "about" &&
-  e(
-    "section",
-    { className: "max-w-5xl mx-auto px-6 py-16" },
+      e("tbody", null,
 
-    e("h2", { className: "text-3xl font-bold mb-10 text-center" }, "About Us / ブランド概要"),
+  e("tr", { className: "border-b" },
+    e("th", { className: "w-1/3 bg-gray-100 px-6 py-4 font-medium" }, "会社名"),
+    e("td", { className: "px-6 py-4" }, "アスディカ―株式会社")
+  ),
 
+  e("tr", { className: "border-b" },
+    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "ブランド"),
+    e("td", { className: "px-6 py-4" }, "Rising Sun Services（コンシューマーブランド）")
+  ),
+
+  e("tr", { className: "border-b" },
+    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "代表者"),
+    e("td", { className: "px-6 py-4" }, "フセイン・モハメドザキル")
+  ),
+
+  e("tr", { className: "border-b" },
+    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "本店所在地"),
+    e("td", { className: "px-6 py-4" }, "東京都葛飾区お花茶屋二丁目2-20-107号")
+  ),
+
+  e("tr", { className: "border-b" },
+    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "事務所"),
+    e("td", { className: "px-6 py-4" }, "〒124-0005 東京都葛飾区宝町２丁目３４−２８号 山田ビル３０３")
+  ),
+
+  e("tr", { className: "border-b" },
+    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "設立日"),
+    e("td", { className: "px-6 py-4" }, "令和7年9月29日")
+  ),
+
+  e("tr", { className: "border-b" },
+    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "会社法人等番号"),
+    e("td", { className: "px-6 py-4" }, "0118-01-046844")
+  ),
+
+  e("tr", { className: "border-b" },
+    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "事業内容"),
     e(
-      "div",
-      { className: "overflow-hidden border rounded-xl" },
+      "td",
+      { className: "px-6 py-4 space-y-1" },
+      e("div", null, "・ITビジネスコンサルティング"),
+      e("div", null, "・システム開発支援"),
+      e("div", null, "・パソコン・電子機器の仕入れ・販売"),
+      e("div", null, "・スパイス・食品等の小規模物販")
+    )
+  ),
 
+  e("tr", { className: "border-b" },
+    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "ウェブサイト"),
+    e(
+      "td",
+      { className: "px-6 py-4" },
       e(
-        "table",
-        { className: "w-full text-left border-collapse text-sm md:text-base" },
-        e("tbody", null,
-
-          e("tr", { className: "border-b" },
-            e("th", { className: "w-1/3 bg-gray-100 px-6 py-4 font-medium" }, "ブランド名"),
-            e("td", { className: "px-6 py-4" }, "Rising Sun Services")
-          ),
-
-          e("tr", { className: "border-b" },
-            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "位置づけ"),
-            e("td", { className: "px-6 py-4" }, "Asdiqa Co. Ltd. のコンシューマーブランド")
-          ),
-
-          e("tr", { className: "border-b" },
-            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "運営会社"),
-            e(
-              "td",
-              { className: "px-6 py-4" },
-              e(
-                "a",
-                {
-                  href: "https://asdiqa.jp",
-                  target: "_blank",
-                  className: "text-orange-600 font-semibold hover:underline",
-                },
-                "Asdiqa Co. Ltd.（アスディカ―株式会社）"
-              )
-            )
-          ),
-
-          e("tr", { className: "border-b" },
-            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "主なサービス"),
-            e(
-              "td",
-              { className: "px-6 py-4 space-y-1" },
-              e("div", null, "・ビジネスコンサルティング"),
-              e("div", null, "・ソフトウェア開発・IT支援"),
-              e("div", null, "・自動車関連サービス"),
-              e("div", null, "・技術教育・サポート")
-            )
-          ),
-
-          e("tr", { className: "border-b" },
-            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "提供地域"),
-            e("td", { className: "px-6 py-4" }, "日本国内および海外")
-          ),
-
-          e("tr", null,
-            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "ウェブサイト"),
-            e(
-              "td",
-              { className: "px-6 py-4" },
-              e(
-                "a",
-                {
-                  href: "https://risingsunservices.jp",
-                  target: "_blank",
-                  className: "text-orange-600 font-semibold hover:underline",
-                },
-                "www.risingsunservices.jp"
-              )
-            )
-          )
-
-        )
+        "a",
+        {
+          href: "https://asdiqa.jp",
+          target: "_blank",
+          className: "text-orange-600 font-semibold hover:underline",
+        },
+        "www.asdiqa.jp"
       )
     )
   ),
+
+  e("tr", null,
+    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "担当者"),
+    e("td", { className: "px-6 py-4" }, "シャイバン・ナシフ（Business Development Manager）")
+  )
+
+)
 
       /* TEAM */
       tab === "team" &&
