@@ -12,23 +12,6 @@ function Card(title, subtitle, text) {
   );
 }
 
-function profileRow(label, value) {
-  return React.createElement(
-    "div",
-    { className: "grid md:grid-cols-3 gap-4 px-6 py-4 text-sm" },
-    React.createElement(
-      "div",
-      { className: "font-medium text-gray-600" },
-      label
-    ),
-    React.createElement(
-      "div",
-      { className: "md:col-span-2 text-gray-800" },
-      value
-    )
-  );
-}
-
 function App() {
   const [tab, setTab] = useState("home");
 
@@ -85,65 +68,90 @@ function App() {
             Card("Rising Sun Automobiles", "", "Export and resale of Japanese vehicles.")
           )
         ),
-      
+
       /* ABOUT */
-    tab === "about" &&
+tab === "about" &&
   e(
     "section",
     { className: "max-w-5xl mx-auto px-6 py-16" },
 
-    e(
-      "h2",
-      { className: "text-3xl font-bold mb-6 text-center" },
-      "会社概要（Company Profile）"
-    ),
-
-    e(
-      "p",
-      { className: "text-gray-600 text-center mb-10" },
-      "Rising Sun Services は、アスディカ―株式会社が展開するコンシューマー向けサービスブランドです。"
-    ),
+    e("h2", { className: "text-3xl font-bold mb-10 text-center" }, "About Us / ブランド概要"),
 
     e(
       "div",
-      { className: "bg-white border rounded-xl shadow-sm divide-y" },
+      { className: "overflow-hidden border rounded-xl" },
 
-      profileRow("会社名", "アスディカ―株式会社"),
-      profileRow("ブランド", "Rising Sun Services（コンシューマーブランド）"),
-      profileRow("代表者", "フセイン・モハメドザキル"),
-      profileRow(
-        "本店所在地",
-        "東京都葛飾区お花茶屋二丁目2-20-107号"
-      ),
-      profileRow(
-        "事務所",
-        "〒124-0005 東京都葛飾区宝町２丁目３４−２８号 山田ビル３０３"
-      ),
-      profileRow("設立日", "令和7年9月29日"),
-      profileRow("会社法人等番号", "0118-01-046844"),
-      profileRow(
-        "事業内容",
-        "ITビジネスコンサルティング / システム開発支援 / パソコン・電子機器の仕入れ・販売 / スパイス・食品等の小規模物販"
-      ),
-      profileRow(
-        "ウェブサイト",
-        e(
-          "a",
-          {
-            href: "https://asdiqa.jp",
-            target: "_blank",
-            className: "text-orange-600 font-semibold hover:underline",
-          },
-          "www.asdiqa.jp"
+      e(
+        "table",
+        { className: "w-full text-left border-collapse text-sm md:text-base" },
+        e("tbody", null,
+
+          e("tr", { className: "border-b" },
+            e("th", { className: "w-1/3 bg-gray-100 px-6 py-4 font-medium" }, "ブランド名"),
+            e("td", { className: "px-6 py-4" }, "Rising Sun Services")
+          ),
+
+          e("tr", { className: "border-b" },
+            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "位置づけ"),
+            e("td", { className: "px-6 py-4" }, "Asdiqa Co. Ltd. のコンシューマーブランド")
+          ),
+
+          e("tr", { className: "border-b" },
+            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "運営会社"),
+            e(
+              "td",
+              { className: "px-6 py-4" },
+              e(
+                "a",
+                {
+                  href: "https://asdiqa.jp",
+                  target: "_blank",
+                  className: "text-orange-600 font-semibold hover:underline",
+                },
+                "Asdiqa Co. Ltd.（アスディカ―株式会社）"
+              )
+            )
+          ),
+
+          e("tr", { className: "border-b" },
+            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "主なサービス"),
+            e(
+              "td",
+              { className: "px-6 py-4 space-y-1" },
+              e("div", null, "・ビジネスコンサルティング"),
+              e("div", null, "・ソフトウェア開発・IT支援"),
+              e("div", null, "・自動車関連サービス"),
+              e("div", null, "・技術教育・サポート")
+            )
+          ),
+
+          e("tr", { className: "border-b" },
+            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "提供地域"),
+            e("td", { className: "px-6 py-4" }, "日本国内および海外")
+          ),
+
+          e("tr", null,
+            e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "ウェブサイト"),
+            e(
+              "td",
+              { className: "px-6 py-4" },
+              e(
+                "a",
+                {
+                  href: "https://risingsunservices.jp",
+                  target: "_blank",
+                  className: "text-orange-600 font-semibold hover:underline",
+                },
+                "www.risingsunservices.jp"
+              )
+            )
+          )
+
         )
-      ),
-      profileRow(
-        "担当者",
-        "シャイバン・ナシフ（Business Development Manager）"
       )
     )
-  )
-      
+  ),
+
       /* TEAM */
       tab === "team" &&
         e(
