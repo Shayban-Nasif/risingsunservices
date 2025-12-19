@@ -69,78 +69,32 @@ function App() {
           )
         ),
 
-      e("tbody", null,
-
-  e("tr", { className: "border-b" },
-    e("th", { className: "w-1/3 bg-gray-100 px-6 py-4 font-medium" }, "会社名"),
-    e("td", { className: "px-6 py-4" }, "アスディカ―株式会社")
-  ),
-
-  e("tr", { className: "border-b" },
-    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "ブランド"),
-    e("td", { className: "px-6 py-4" }, "Rising Sun Services（コンシューマーブランド）")
-  ),
-
-  e("tr", { className: "border-b" },
-    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "代表者"),
-    e("td", { className: "px-6 py-4" }, "フセイン・モハメドザキル")
-  ),
-
-  e("tr", { className: "border-b" },
-    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "本店所在地"),
-    e("td", { className: "px-6 py-4" }, "東京都葛飾区お花茶屋二丁目2-20-107号")
-  ),
-
-  e("tr", { className: "border-b" },
-    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "事務所"),
-    e("td", { className: "px-6 py-4" }, "〒124-0005 東京都葛飾区宝町２丁目３４−２８号 山田ビル３０３")
-  ),
-
-  e("tr", { className: "border-b" },
-    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "設立日"),
-    e("td", { className: "px-6 py-4" }, "令和7年9月29日")
-  ),
-
-  e("tr", { className: "border-b" },
-    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "会社法人等番号"),
-    e("td", { className: "px-6 py-4" }, "0118-01-046844")
-  ),
-
-  e("tr", { className: "border-b" },
-    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "事業内容"),
-    e(
-      "td",
-      { className: "px-6 py-4 space-y-1" },
-      e("div", null, "・ITビジネスコンサルティング"),
-      e("div", null, "・システム開発支援"),
-      e("div", null, "・パソコン・電子機器の仕入れ・販売"),
-      e("div", null, "・スパイス・食品等の小規模物販")
-    )
-  ),
-
-  e("tr", { className: "border-b" },
-    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "ウェブサイト"),
-    e(
-      "td",
-      { className: "px-6 py-4" },
-      e(
-        "a",
-        {
-          href: "https://asdiqa.jp",
-          target: "_blank",
-          className: "text-orange-600 font-semibold hover:underline",
-        },
-        "www.asdiqa.jp"
-      )
-    )
-  ),
-
-  e("tr", null,
-    e("th", { className: "bg-gray-100 px-6 py-4 font-medium" }, "担当者"),
-    e("td", { className: "px-6 py-4" }, "シャイバン・ナシフ（Business Development Manager）")
-  )
-
-)
+      /* ABOUT */
+      tab === "about" &&
+        e(
+          "section",
+          { className: "max-w-4xl mx-auto px-6 py-16 text-center" },
+          e("h2", { className: "text-3xl font-bold mb-6" }, "About Us"),
+          e(
+            "p",
+            { className: "text-gray-600 text-lg mb-6" },
+            "Rising Sun Services is a consumer-focused venture delivering professional services backed by strong corporate governance."
+          ),
+          e(
+            "p",
+            { className: "text-gray-500" },
+            "A venture of ",
+            e(
+              "a",
+              {
+                href: "https://asdiqa.jp",
+                className: "text-orange-600 font-semibold hover:underline",
+                target: "_blank",
+              },
+              "Asdiqa Co. Ltd."
+            )
+          )
+        ),
 
       /* TEAM */
       tab === "team" &&
