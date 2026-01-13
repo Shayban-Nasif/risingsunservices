@@ -140,6 +140,12 @@ function RisingSunAutomobiles({ onBack }) {
     e("h2", { className: "text-4xl font-bold mb-4 text-center text-gray-900" }, "Rising Sun Automobiles"),
     e("p", { className: "text-center text-gray-600 mb-12" }, "Trusted export and domestic sales of premium Japanese vehicles."),
     
+    e("div", { className: "grid md:grid-cols-3 gap-4 mb-12" },
+        ["Digital Transformation Support", "Strategic System Development Support", "Business Promotion Support"].map(s => 
+            e("div", { key: s, className: "p-4 bg-orange-50 border border-orange-100 rounded-lg text-sm font-bold text-orange-800 text-center" }, s)
+        )
+    ),
+    
     e("div", { className: "bg-white p-8 rounded-2xl shadow-xl border border-gray-100" },
       SectionHeader("Vehicle Inquiry & Consultation"),
       e("form", { onSubmit: handleSubmit },
