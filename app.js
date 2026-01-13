@@ -241,14 +241,14 @@ function StatsStrip() {
 // --- MAIN APP COMPONENT ---
 
 function App() {
-  const [tab, setTab] = useState("home");
+  const [tab, setTab] = useState("HOME");
 
   const Nav = () => e("nav", { className: "bg-white/90 backdrop-blur-md border-b sticky top-0 z-50 p-4" },
     e("div", { className: "max-w-6xl mx-auto flex justify-between items-center" },
       e("div", { className: "text-xl font-bold text-orange-600 cursor-pointer flex items-center gap-2", onClick: () => setTab("home") }, 
         e("span", {className: "text-2xl"}, "☀"), "Rising Sun Services"),
       e("div", { className: "hidden md:flex gap-8 font-bold text-xs uppercase tracking-widest text-gray-500" },
-        ["home", "about", "team", "contact"].map(t => e("button", { key: t, onClick: () => setTab(t), className: `hover:text-orange-600 transition ${tab === t ? "text-orange-600 border-b-2 border-orange-600" : ""}` }, t))
+        ["HOME", "ABOUT", "TEAM", "CONTACT"].map(t => e("button", { key: t, onClick: () => setTab(t), className: `hover:text-orange-600 transition ${tab === t ? "text-orange-600 border-b-2 border-orange-600" : ""}` }, t))
       )
     )
   );
@@ -256,7 +256,7 @@ function App() {
   return e("div", { className: "min-h-screen flex flex-col font-sans bg-gray-50 text-gray-900" },
     Nav(),
     e("main", { className: "flex-grow" },
-      tab === "home" && e("div", null,
+      tab === "HOME" && e("div", null,
         e(HeroSlider),
         e(StatsStrip),
         e("section", { className: "max-w-4xl mx-auto py-16 px-6 text-center" },
@@ -274,11 +274,11 @@ function App() {
         )
       ),
       
-      tab === "consulting" && e(RisingSunConsulting, { onBack: () => setTab("home") }),
-      tab === "techlab" && e(RisingSunTechLab, { onBack: () => setTab("home") }),
-      tab === "autos" && e(RisingSunAutomobiles, { onBack: () => setTab("home") }),
+      tab === "consulting" && e(RisingSunConsulting, { onBack: () => setTab("HOME") }),
+      tab === "techlab" && e(RisingSunTechLab, { onBack: () => setTab("HOME") }),
+      tab === "autos" && e(RisingSunAutomobiles, { onBack: () => setTab("HOME") }),
 
-      tab === "about" && e("section", { className: "max-w-4xl mx-auto px-6 py-16 animate-fade-in" },
+      tab === "ABOUT" && e("section", { className: "max-w-4xl mx-auto px-6 py-16 animate-fade-in" },
         e("h2", { className: "text-4xl font-bold mb-10 text-center" }, "About Us"),
         e("div", { className: "bg-white rounded-2xl shadow-sm border overflow-hidden" },
           e("table", { className: "w-full text-left border-collapse" },
@@ -298,7 +298,7 @@ function App() {
         )
       ),
 
-      tab === "team" && e("section", { className: "max-w-6xl mx-auto px-6 py-16 animate-fade-in text-center" },
+      tab === "TEAM" && e("section", { className: "max-w-6xl mx-auto px-6 py-16 animate-fade-in text-center" },
         e("h2", { className: "text-4xl font-bold mb-12" }, "Our Leadership"),
         e("div", { className: "grid md:grid-cols-3 gap-8" },
             Card("Mohammad Zakir Hossen", "Director", "15+ years experience in System Engineering."),
@@ -307,7 +307,7 @@ function App() {
         )
       ),
 
-      tab === "contact" && e("section", { className: "max-w-2xl mx-auto px-6 py-24 animate-fade-in text-center" },
+      tab === "CONTACT" && e("section", { className: "max-w-2xl mx-auto px-6 py-24 animate-fade-in text-center" },
         e("div", { className: "bg-white p-12 rounded-3xl shadow-xl border border-gray-100" },
             e("h2", { className: "text-3xl font-bold mb-6" }, "Contact Us"),
             e("p", { className: "text-xl text-orange-600 font-bold mb-2" }, "risingsunservices.jp@gmail.com"),
