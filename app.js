@@ -225,6 +225,100 @@ function App() {
 
   // Hero, Stats, Mission components excluded for brevity but assumed present from previous steps
   // (You can keep the Hero/Stats/Mission code from the previous response here)
+  
+  // --- NEW HOME PAGE COMPONENTS ---
+
+function HeroSlider() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      id: 1,
+      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1600&auto=format&fit=crop", // Tech image
+      title: "Rising Sun TechLab",
+      subtitle: "Empowering the future through System Development & IT Education."
+    },
+    {
+      id: 2,
+      image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1600&auto=format&fit=crop", // Consulting image
+      title: "Strategic Consulting",
+      subtitle: "Navigating your business towards global success."
+    },
+    {
+      id: 3,
+      image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=1600&auto=format&fit=crop", // Auto image
+      title: "Rising Sun Automobiles",
+      subtitle: "Connecting the world with premium Japanese vehicles."
+    }
+  ];
+
+  // Auto-advance slider
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000); // Change every 5 seconds
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
+  return e(
+    "div",
+    { className: "relative w-full h-[500px] overflow-hidden bg-gray-900" },
+    slides.map((slide, index) =>
+      e(
+        "div",
+        {
+          key: slide.id,
+          className: `absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? "opacity-100" : "opacity-0"}`,
+        },
+        // Background Image with Overlay
+        e("img", { src: slide.image, className: "w-full h-full object-cover opacity-60" }),
+        e("div", { className: "absolute inset-0 bg-gradient-to-t from-gray-900/90 to-transparent" }),
+        
+        // Text Content
+        e(
+          "div",
+          { className: "absolute inset-0 flex flex-col items-center justify-center text-center px-6" },
+          e("h2", { className: "text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg tracking-tight" }, slide.title),
+          e("p", { className: "text-lg md:text-2xl text-gray-200 max-w-3xl drop-shadow-md" }, slide.subtitle),
+          e("button", { className: "mt-8 px-8 py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-full transition transform hover:scale-105" }, "Learn More")
+        )
+      )
+    ),
+    // Dots Navigation
+    e(
+      "div",
+      { className: "absolute bottom-8 left-0 right-0 flex justify-center gap-3" },
+      slides.map((_, idx) =>
+        e("button", {
+          key: idx,
+          onClick: () => setCurrentSlide(idx),
+          className: `w-3 h-3 rounded-full transition-all ${idx === currentSlide ? "bg-orange-500 w-8" : "bg-gray-400 hover:bg-white"}`
+        })
+      )
+    )
+  );
+}
+
+function StatsStrip() {
+  const StatItem = (num, label) => e("div", { className: "text-center" }, 
+    e("div", { className: "text-3xl font-bold text-orange-600" }, num),
+    e("div", { className: "text-sm text-gray-600 uppercase tracking-wider font-semibold" }, label)
+  );
+
+  return e(
+    "div",
+    { className: "bg-gray-50 border-y border-gray-100" },
+    e(
+      "div",
+      { className: "max-w-6xl mx-auto px-6 py-8 grid grid-cols-2 md:grid-cols-4 gap-8" },
+      StatItem("Global", "Reach"),
+      StatItem("15+", "Years Experience"),
+      StatItem("100%", "Japanese Quality"),
+      StatItem("24/7", "Support")
+    )
+  );
+}
+  
   const HeroSlider = () => e("div", {className: "bg-gray-900 h-64 flex items-center justify-center text-white"}, "Hero Slider Area"); 
   const StatsStrip = () => e("div", {className: "py-4 bg-gray-50 text-center border-b"}, "Stats Strip Area");
   const MissionSection = () => e("div", {className: "py-8 text-center"}, "Mission Section Area");
