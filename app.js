@@ -204,7 +204,7 @@ tab === "about" &&
           { className: "max-w-3xl mx-auto px-6 py-16 text-center" },
           e("h2", { className: "text-3xl font-bold mb-6" }, "Contact Us"),
           e("p", { className: "text-gray-600 mb-2" }, "Tokyo, Japan"),
-          e("p", { className: "text-gray-600" }, "Email: contact@risingsun.jp"),
+          e("p", { className: "text-gray-600" }, "Email: risingsunservices.jp@gmail.com"),
           e("p", { className: "text-gray-600" }, "Phone: +81 80-7307-2277")
         )
     ),
