@@ -141,8 +141,8 @@ function RisingSunAutomobiles({ onBack }) {
     e("p", { className: "text-center text-gray-600 mb-12" }, "Trusted export and domestic sales of premium Japanese vehicles."),
     
     e("div", { className: "grid md:grid-cols-3 gap-4 mb-12" },
-        ["Digital Transformation Support", "Strategic System Development Support", "Business Promotion Support"].map(s => 
-            e("div", { key: s, className: "p-4 bg-orange-50 border border-orange-100 rounded-lg text-sm font-bold text-orange-800 text-center" }, s)
+        ["Intra-Japan Car Sales", "Global Car Export", "Budget Consultation"].map(s => 
+            e("div", { key: s, className: "p-4 bg-gray-50 border rounded-lg font-bold text-gray-800 text-center" }, s)
         )
     ),
     
@@ -162,7 +162,9 @@ function RisingSunAutomobiles({ onBack }) {
         TextArea({ label: "Specific Requirements", placeholder: "Color, Year, Mileage...", value: form.details, onChange: e => setForm({...form, details: e.target.value}) }),
         InputField({ label: "Preferred Meeting Time", type: "datetime-local", value: form.time, onChange: e => setForm({...form, time: e.target.value}) }),
         e("button", { className: "w-full bg-gray-900 hover:bg-black text-white font-bold py-3 rounded-lg transition mt-4 shadow-lg" }, "Send Vehicle Inquiry")
-      )
+        SelectField({ label: "Required Services", options: ["Digital Transformation Support", "Strategic System Development Support", "Business Promotion Support", "Other"], value: form.service, onChange: e => setForm({...form, service: e.target.value}) }),
+        e("button", { className: "w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-lg transition mt-4 shadow-lg" }, "Submit Consultation Request")
+       )
     )
   );
 }
