@@ -135,15 +135,6 @@ function RisingSunAutomobiles({ onBack }) {
     alert(`Inquiry sent for ${form.maker} ${form.model}. We will contact you at ${form.contact}.`);
   };
   
-  return e("div", { className: "max-w-4xl mx-auto px-6 py-10" },
-    e("button", { onClick: onBack, className: "text-gray-500 hover:text-orange-600 mb-8 font-medium" }, "← Back to Services"),
-    e("h2", { className: "text-4xl font-bold mb-4 text-center text-gray-900" }, "Rising Sun Automobiles"),
-    e("div", { className: "grid md:grid-cols-3 gap-6 mb-12" },
-      ["Intra-Japan Car Sales", "Global Car Export", "Budget Consultation"].map(s => 
-        e("div", { key: s, className: "p-4 bg-gray-50 border rounded-lg font-bold text-gray-800 text-center" }, s)
-      )
-    ),
-  
   return e("div", { className: "max-w-4xl mx-auto px-6 py-10 animate-fade-in" },
     e("button", { onClick: onBack, className: "text-gray-500 hover:text-orange-600 mb-8 font-medium" }, "← Back to Services"),
     e("h2", { className: "text-4xl font-bold mb-4 text-center text-gray-900" }, "Rising Sun Automobiles"),
@@ -166,8 +157,6 @@ function RisingSunAutomobiles({ onBack }) {
         InputField({ label: "Preferred Meeting Time", type: "datetime-local", value: form.time, onChange: e => setForm({...form, time: e.target.value}) }),
         e("button", { className: "w-full bg-gray-900 hover:bg-black text-white font-bold py-3 rounded-lg transition mt-4 shadow-lg" }, "Send Vehicle Inquiry")
       )
-      SelectField({ label: "Required Services", options: ["Intra-Japan Car Sales", "Global Car Export", "Budget Consultation", "Other"], value: form.service, onChange: e => setForm({...form, service: e.target.value}) }),
-        e("button", { className: "w-full bg-orange-600 text-white font-bold py-3 rounded-lg mt-4" }, "Submit Request")
     )
   );
 }
