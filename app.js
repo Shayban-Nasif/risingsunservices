@@ -267,32 +267,30 @@ function App() {
     )
   );
 
-  return e("div", { className: "min-h-screen flex flex-col font-sans bg-gray-50" },
+   return e("div", { className: "min-h-screen flex flex-col font-sans bg-gray-50 text-gray-900" },
     Nav(),
     e("main", { className: "flex-grow" },
       tab === "HOME" && e("div", null,
         e(HeroSlider),
-        e(ServiceShortcutBar),
+        e(StatsStrip),
         e("section", { className: "max-w-4xl mx-auto py-16 px-6 text-center" },
-        e("h2", { className: "text-sm font-bold text-orange-600 uppercase tracking-widest mb-4" }, "Introduction"),
-        e("h3", { className: "text-3xl font-bold mb-6" }, "Bridging Japan and the Global Market"),
-        e("p", { className: "text-gray-600 text-lg leading-relaxed" }, "Rising Sun Services is the consumer brand of Asdiqa Co. Ltd., providing world-class technology, consulting, and automotive solutions. Our mission is to maintain Japanese standards of integrity and quality across all our global ventures.")
+            e("h2", { className: "text-sm font-bold text-orange-600 uppercase tracking-widest mb-4" }, "Introduction"),
+            e("h3", { className: "text-3xl font-bold mb-6" }, "Bridging Japan and the Global Market"),
+            e("p", { className: "text-gray-600 text-lg leading-relaxed" }, 
+                "Rising Sun Services is the consumer brand of Asdiqa Co. Ltd., providing world-class technology, consulting, and automotive solutions. Our mission is to maintain Japanese standards of integrity and quality across all our global ventures.")
         ),
-        e("section", { id: "services", className: "max-w-6xl mx-auto py-24 px-6" },
+        e("section", { className: "max-w-6xl mx-auto py-12 px-6 pb-24" },
           e("div", { className: "grid md:grid-cols-3 gap-8" },
-            Card("Consulting", "Business Strategy", "DX Support and System Planning.", () => setTab("consulting")),
-            Card("TechLab", "IT & Education", "Software development and IT workforce training.", () => setTab("techlab")),
-            Card("Automobiles", "Vehicle Trade", "Export and domestic sales of cars.", () => setTab("autos"))
+            Card("Consulting", "Business Advisory", "DX Support and Strategic System Planning.", () => setTab("consulting")),
+            Card("TechLab", "IT & Education", "Software development and tech workforce training.", () => setTab("techlab")),
+            Card("Automobiles", "Vehicle Trade", "Exporting and domestic sales of reconditioned cars.", () => setTab("autos"))
           )
         )
       ),
+      
       tab === "consulting" && e(RisingSunConsulting, { onBack: () => setTab("HOME") }),
       tab === "techlab" && e(RisingSunTechLab, { onBack: () => setTab("HOME") }),
       tab === "autos" && e(RisingSunAutomobiles, { onBack: () => setTab("HOME") }),
-      tab === "ABOUT" && e("section", { className: "max-w-4xl mx-auto py-16 px-6" }, e("h2", {className: "text-3xl font-bold mb-8"}, "About Us"), e("div", {className: "bg-white border rounded-xl p-8"}, "Corporate Information Table Goes Here")),
-      tab === "TEAM" && e("section", { className: "max-w-4xl mx-auto py-16 px-6" }, e("h2", {className: "text-3xl font-bold mb-8"}, "Our Team"), e("div", {className: "grid md:grid-cols-2 gap-4"}, Card("Zakir Hossen", "Director", "Engineering Expert"), Card("Shayban Nasif", "Head of Ops", "Technology Specialist"))),
-      tab === "CONTACT" && e("section", { className: "max-w-2xl mx-auto py-24 px-6 text-center" }, e("div", {className: "bg-white p-12 rounded-3xl border"}, e("h2", {className: "text-3xl font-bold mb-4"}, "Contact"), e("p", null, "risingsunservices.jp@gmail.com")))
-    ),
 
       tab === "ABOUT" && e("section", { className: "max-w-4xl mx-auto px-6 py-16 animate-fade-in" },
         e("h2", { className: "text-4xl font-bold mb-10 text-center" }, "About Us"),
@@ -332,8 +330,10 @@ function App() {
         )
       )
     ),
-           
-    e("footer", { className: "bg-gray-900 text-gray-500 py-10 text-center text-sm" }, "© 2025 Rising Sun Services · Asdiqa Co. Ltd.")
+    e("footer", { className: "bg-gray-900 text-gray-500 py-12 text-center text-sm" }, 
+        e("div", { className: "font-bold text-white mb-2" }, "Rising Sun Services"),
+        "© 2025 Rising Sun Services · A brand of Asdiqa Co. Ltd."
+    )
   );
 }
 
