@@ -234,7 +234,7 @@ function App() {
     e("div", { className: "max-w-6xl mx-auto flex justify-between items-center" },
       e("div", { className: "text-xl font-bold text-orange-600 cursor-pointer flex items-center gap-2", onClick: () => setTab("home") }, "☀ Rising Sun Services"),
       e("div", { className: "hidden md:flex gap-8 font-bold text-xs uppercase tracking-widest text-gray-500" },
-        ["home", "about", "team", "contact"].map(t => e("button", { key: t, onClick: () => setTab(t), className: tab === t ? "text-orange-600 border-b-2 border-orange-600" : "hover:text-orange-600" }, t))
+        ["HOME", "ABOUT", "TEAM", "CONTACT"].map(t => e("button", { key: t, onClick: () => setTab(t), className: tab === t ? "text-orange-600 border-b-2 border-orange-600" : "hover:text-orange-600" }, t))
       )
     )
   );
@@ -273,6 +273,11 @@ function App() {
       tab === "home" && e("div", null,
         e(HeroSlider),
         e(ServiceShortcutBar),
+        e("section", { className: "max-w-4xl mx-auto py-16 px-6 text-center" },
+        e("h2", { className: "text-sm font-bold text-orange-600 uppercase tracking-widest mb-4" }, "Introduction"),
+        e("h3", { className: "text-3xl font-bold mb-6" }, "Bridging Japan and the Global Market"),
+        e("p", { className: "text-gray-600 text-lg leading-relaxed" }, "Rising Sun Services is the consumer brand of Asdiqa Co. Ltd., providing world-class technology, consulting, and automotive solutions. Our mission is to maintain Japanese standards of integrity and quality across all our global ventures.")
+        ),
         e("section", { id: "services", className: "max-w-6xl mx-auto py-24 px-6" },
           e("div", { className: "grid md:grid-cols-3 gap-8" },
             Card("Consulting", "Business Strategy", "DX Support and System Planning.", () => setTab("consulting")),
