@@ -129,9 +129,9 @@ function RisingSunTechLab({ onBack }) {
     ),
     subTab === "dev" ? e("div", null,
       e("div", { className: "grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16" },
-        renderServiceItem("Web Solutions", "Tailored web applications.", ["E-commerce", "SaaS", "Dashboards"]),
+        renderServiceItem("Web Solutions", "Tailored web applications.", ["Homepage", "E-commerce", "SaaS", "Dashboards"]),
         renderServiceItem("Mobile Apps", "iOS & Android development.", ["UI/UX", "API Integration"]),
-        renderServiceItem("Automation", "Workflow internal tooling.", ["Scripts", "Data Scraping"]),
+        renderServiceItem("Automation", "Workflow internal tooling.", ["AI Chatbots", "Scripts", "Data Scraping"]),
         renderServiceItem("Cloud Ops", "Scalable secure hosting.", ["AWS", "DevOps"])
       ),
       e("div", { className: "text-center" },
@@ -140,12 +140,12 @@ function RisingSunTechLab({ onBack }) {
       )
     ) : e("div", { className: "grid md:grid-cols-3 gap-6" },
       e("div", { className: "md:col-span-2 bg-orange-600 text-white p-8 rounded-2xl" },
-        e("h3", { className: "text-2xl font-bold mb-4" }, "The Global Bridge Program"),
-        e("p", { className: "mb-6 opacity-90" }, "Training international talent for the Japanese market.")
+        e("h3", { className: "text-2xl font-bold mb-4" }, "Robotics for Kids"),
+        e("p", { className: "mb-6 opacity-90" }, "Training kids for the competitive tech world")
       ),
       e("div", { className: "bg-white border p-6 rounded-2xl" },
         e("h4", { className: "font-bold mb-4" }, "Active Courses"),
-        ["Full Stack MERN", "Python for Data", "IT Literacy"].map(c => e("div", { key: c, className: "py-2 border-b last:border-0 text-sm" }, c))
+        ["Robotics for Kids", "Advanced MS EXCEL", "Python for all"].map(c => e("div", { key: c, className: "py-2 border-b last:border-0 text-sm" }, c))
       )
     )
   );
@@ -297,8 +297,8 @@ function App() {
               [
                 ["Brand Name", "Rising Sun Services"],
                 ["Company", "Asdiqa Co. Ltd. (Parent Company)"],
-                ["Office", "山田ビル３０３, 宝町２丁目３４−２８, 葛飾区, 東京都"],
-                ["Registered Address", "お花茶屋二丁目2-20-107号, 葛飾区, 東京都"],
+                ["Office", "東京都葛飾区宝町２丁目３４−２８山田ビル３０３"],
+                ["Registered Address", "東京都葛飾区お花茶屋二丁目2-20-107号"],
                 ["Service Areas", "Japan Domestic & Global Markets"]
               ].map(([h, v], i) => e("tr", { key: i, className: "border-b last:border-0" },
                 e("th", { className: "bg-gray-50 px-6 py-4 font-bold text-gray-700 w-1/3" }, h),
