@@ -232,7 +232,7 @@ function App() {
 
   const Nav = () => e("nav", { className: "bg-white border-b sticky top-0 z-50 p-4" },
     e("div", { className: "max-w-6xl mx-auto flex justify-between items-center" },
-      e("div", { className: "text-xl font-bold text-orange-600 cursor-pointer flex items-center gap-2", onClick: () => setTab("home") }, "☀ Rising Sun Services"),
+      e("div", { className: "text-xl font-bold text-orange-600 cursor-pointer flex items-center gap-2", onClick: () => setTab("HOME") }, "☀ Rising Sun Services"),
       e("div", { className: "hidden md:flex gap-8 font-bold text-xs uppercase tracking-widest text-gray-500" },
         ["HOME", "ABOUT", "TEAM", "CONTACT"].map(t => e("button", { key: t, onClick: () => setTab(t), className: tab === t ? "text-orange-600 border-b-2 border-orange-600" : "hover:text-orange-600" }, t))
       )
@@ -338,7 +338,7 @@ function App() {
         )
       )
     ),
-    e("footer", { className: "bg-gray-900 text-gray-500 py-10 text-center text-sm" }, "© 2025 Rising Sun Services · Asdiqa Co. Ltd.")
+    e("footer", { className: "bg-gray-900 text-gray-500 py-10 text-center text-sm" }, "© 2026 Rising Sun Services · Asdiqa Co. Ltd.")
   );
 }
 
