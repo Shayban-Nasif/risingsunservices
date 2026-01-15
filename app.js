@@ -267,12 +267,23 @@ function App() {
     )
   );
 
+  function StatsStrip() {
+    return e("div", { className: "bg-white border-y border-gray-100 py-8 shadow-sm" },
+      e("div", { className: "max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center" },
+        [["Global", "Reach"], ["15+", "Years Exp"], ["Japanese", "Quality"], ["24/7", "Support"]].map(([v, l]) => 
+          e("div", { key: l }, e("div", { className: "text-3xl font-bold text-orange-600" }, v), e("div", { className: "text-xs font-bold uppercase tracking-widest text-gray-400 mt-1" }, l))
+        )
+      )
+    );
+  }
+  
    return e("div", { className: "min-h-screen flex flex-col font-sans bg-gray-50" },
     Nav(),
     e("main", { className: "flex-grow" },
       tab === "HOME" && e("div", null,
         e(HeroSlider),
         e(ServiceShortcutBar),
+        e(StatsStrip),
         e("section", { className: "max-w-4xl mx-auto py-16 px-6 text-center" },
         e("h2", { className: "text-sm font-bold text-orange-600 uppercase tracking-widest mb-4" }, "Introduction"),
         e("h3", { className: "text-3xl font-bold mb-6" }, "Bridging Japan and the Global Market"),
