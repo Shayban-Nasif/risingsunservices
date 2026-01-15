@@ -262,14 +262,14 @@ function App() {
   const ServiceShortcutBar = () => e("div", { className: "bg-white border-b py-4" },
     e("div", { className: "max-w-4xl mx-auto flex justify-center gap-4 md:gap-12" },
       [["Consulting", "consulting"], ["TechLab", "techlab"], ["Automobiles", "autos"]].map(([n, t]) => 
-        e("button", { key: t, onClick: () => setTab(t), className: "text-xs font-bold uppercase text-gray-400 hover:text-orange-600 tracking-widest flex items-center gap-2" }, "➜", n)
+        e("button", { key: t, onClick: () => setTab(t), className: "text-xs font-bold uppercase text-gray-600 hover:text-orange-600 tracking-widest flex items-center gap-2" }, "➜", n)
       )
     )
   );
 
   function StatsStrip() {
     return e("div", { className: "bg-white border-y border-gray-100 py-8 shadow-sm" },
-      e("div", { className: "max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center" },
+      e("div", { className: "max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-2 text-center" },
         [["Global", "Reach"], ["15+", "Years Exp"], ["Japanese", "Quality"], ["24/7", "Support"]].map(([v, l]) => 
           e("div", { key: l }, e("div", { className: "text-3xl font-bold text-orange-600" }, v), e("div", { className: "text-xs font-bold uppercase tracking-widest text-gray-400 mt-1" }, l))
         )
@@ -290,7 +290,7 @@ function App() {
         e("p", { className: "text-gray-600 text-lg leading-relaxed" }, "Rising Sun Services is the consumer brand of Asdiqa Co. Ltd., providing world-class technology, consulting, and automotive solutions. Our mission is to maintain Japanese standards of integrity and quality across all our global ventures.")
         ),
         e("section", { id: "services", className: "max-w-6xl mx-auto py-24 px-6" },
-          e("div", { className: "grid md:grid-cols-3 gap-8" },
+          e("div", { className: "grid md:grid-cols-3 gap-4" },
             Card("Consulting", "Business Strategy", "DX Support and System Planning.", () => setTab("consulting")),
             Card("TechLab", "IT & Education", "Software development and IT workforce training.", () => setTab("techlab")),
             Card("Automobiles", "Vehicle Trade", "Export and domestic sales of cars.", () => setTab("autos"))
