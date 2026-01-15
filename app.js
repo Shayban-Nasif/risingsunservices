@@ -293,6 +293,46 @@ function App() {
       tab === "TEAM" && e("section", { className: "max-w-4xl mx-auto py-16 px-6" }, e("h2", {className: "text-3xl font-bold mb-8"}, "Our Team"), e("div", {className: "grid md:grid-cols-2 gap-4"}, Card("Zakir Hossen", "Director", "Engineering Expert"), Card("Shayban Nasif", "Head of Ops", "Technology Specialist"))),
       tab === "CONTACT" && e("section", { className: "max-w-2xl mx-auto py-24 px-6 text-center" }, e("div", {className: "bg-white p-12 rounded-3xl border"}, e("h2", {className: "text-3xl font-bold mb-4"}, "Contact"), e("p", null, "risingsunservices.jp@gmail.com")))
     ),
+
+      tab === "ABOUT" && e("section", { className: "max-w-4xl mx-auto px-6 py-16 animate-fade-in" },
+        e("h2", { className: "text-4xl font-bold mb-10 text-center" }, "About Us"),
+        e("div", { className: "bg-white rounded-2xl shadow-sm border overflow-hidden" },
+          e("table", { className: "w-full text-left border-collapse" },
+            e("tbody", null,
+              [
+                ["Brand Name", "Rising Sun Services"],
+                ["Company", "Asdiqa Co. Ltd. (Parent Company)"],
+                ["Office", "山田ビル３０３, 宝町２丁目３４−２８, 葛飾区, 東京都"],
+                ["Registered Address", "お花茶屋二丁目2-20-107号, 葛飾区, 東京都"],
+                ["Service Areas", "Japan Domestic & Global Markets"]
+              ].map(([h, v], i) => e("tr", { key: i, className: "border-b last:border-0" },
+                e("th", { className: "bg-gray-50 px-6 py-4 font-bold text-gray-700 w-1/3" }, h),
+                e("td", { className: "px-6 py-4 text-gray-600" }, v)
+              ))
+            )
+          )
+        )
+      ),
+
+      tab === "TEAM" && e("section", { className: "max-w-6xl mx-auto px-6 py-16 animate-fade-in text-center" },
+        e("h2", { className: "text-4xl font-bold mb-12" }, "Our Leadership"),
+        e("div", { className: "grid md:grid-cols-3 gap-8" },
+            Card("Mohammad Zakir Hossen", "Director", "15+ years experience in System Engineering."),
+            Card("Shayban Nasif", "Head of Operations", "Technology and Consulting specialist."),
+            Card("Abdullah Al Asif", "Executive Consultant", "Customer communications lead.")
+        )
+      ),
+
+      tab === "CONTACT" && e("section", { className: "max-w-2xl mx-auto px-6 py-24 animate-fade-in text-center" },
+        e("div", { className: "bg-white p-12 rounded-3xl shadow-xl border border-gray-100" },
+            e("h2", { className: "text-3xl font-bold mb-6" }, "Contact Us"),
+            e("p", { className: "text-xl text-orange-600 font-bold mb-2" }, "risingsunservices.jp@gmail.com"),
+            e("p", { className: "text-gray-500 mb-8" }, "Tokyo, Japan | +81 80-7307-2277"),
+            e("button", { className: "px-8 py-3 bg-gray-900 text-white rounded-full font-bold", onClick: () => window.location.href='mailto:risingsunservices.jp@gmail.com' }, "Send an Email")
+        )
+      )
+    ),
+           
     e("footer", { className: "bg-gray-900 text-gray-500 py-10 text-center text-sm" }, "© 2025 Rising Sun Services · Asdiqa Co. Ltd.")
   );
 }
