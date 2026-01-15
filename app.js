@@ -228,7 +228,7 @@ function RisingSunAutomobiles({ onBack }) {
 // --- MAIN APP ---
 
 function App() {
-  const [tab, setTab] = useState("home");
+  const [tab, setTab] = useState("HOME");
 
   const Nav = () => e("nav", { className: "bg-white border-b sticky top-0 z-50 p-4" },
     e("div", { className: "max-w-6xl mx-auto flex justify-between items-center" },
@@ -270,7 +270,7 @@ function App() {
   return e("div", { className: "min-h-screen flex flex-col font-sans bg-gray-50" },
     Nav(),
     e("main", { className: "flex-grow" },
-      tab === "home" && e("div", null,
+      tab === "HOME" && e("div", null,
         e(HeroSlider),
         e(ServiceShortcutBar),
         e("section", { className: "max-w-4xl mx-auto py-16 px-6 text-center" },
@@ -286,12 +286,12 @@ function App() {
           )
         )
       ),
-      tab === "consulting" && e(RisingSunConsulting, { onBack: () => setTab("home") }),
-      tab === "techlab" && e(RisingSunTechLab, { onBack: () => setTab("home") }),
-      tab === "autos" && e(RisingSunAutomobiles, { onBack: () => setTab("home") }),
-      tab === "about" && e("section", { className: "max-w-4xl mx-auto py-16 px-6" }, e("h2", {className: "text-3xl font-bold mb-8"}, "About Us"), e("div", {className: "bg-white border rounded-xl p-8"}, "Corporate Information Table Goes Here")),
-      tab === "team" && e("section", { className: "max-w-4xl mx-auto py-16 px-6" }, e("h2", {className: "text-3xl font-bold mb-8"}, "Our Team"), e("div", {className: "grid md:grid-cols-2 gap-4"}, Card("Zakir Hossen", "Director", "Engineering Expert"), Card("Shayban Nasif", "Head of Ops", "Technology Specialist"))),
-      tab === "contact" && e("section", { className: "max-w-2xl mx-auto py-24 px-6 text-center" }, e("div", {className: "bg-white p-12 rounded-3xl border"}, e("h2", {className: "text-3xl font-bold mb-4"}, "Contact"), e("p", null, "risingsunservices.jp@gmail.com")))
+      tab === "consulting" && e(RisingSunConsulting, { onBack: () => setTab("HOME") }),
+      tab === "techlab" && e(RisingSunTechLab, { onBack: () => setTab("HOME") }),
+      tab === "autos" && e(RisingSunAutomobiles, { onBack: () => setTab("HOME") }),
+      tab === "ABOUT" && e("section", { className: "max-w-4xl mx-auto py-16 px-6" }, e("h2", {className: "text-3xl font-bold mb-8"}, "About Us"), e("div", {className: "bg-white border rounded-xl p-8"}, "Corporate Information Table Goes Here")),
+      tab === "TEAM" && e("section", { className: "max-w-4xl mx-auto py-16 px-6" }, e("h2", {className: "text-3xl font-bold mb-8"}, "Our Team"), e("div", {className: "grid md:grid-cols-2 gap-4"}, Card("Zakir Hossen", "Director", "Engineering Expert"), Card("Shayban Nasif", "Head of Ops", "Technology Specialist"))),
+      tab === "CONTACT" && e("section", { className: "max-w-2xl mx-auto py-24 px-6 text-center" }, e("div", {className: "bg-white p-12 rounded-3xl border"}, e("h2", {className: "text-3xl font-bold mb-4"}, "Contact"), e("p", null, "risingsunservices.jp@gmail.com")))
     ),
     e("footer", { className: "bg-gray-900 text-gray-500 py-10 text-center text-sm" }, "© 2025 Rising Sun Services · Asdiqa Co. Ltd.")
   );
