@@ -232,18 +232,27 @@ function App() {
 
     const Nav = () => e("nav", { className: "bg-white border-b sticky top-0 z-50 p-4 shadow-sm" },
   e("div", { className: "max-w-6xl mx-auto flex justify-between items-center" },
+    // --- Logo Section Start ---
     e("div", { 
-      className: "flex items-center gap-3 cursor-pointer", 
+      className: "flex items-center cursor-pointer", 
       onClick: () => setTab("HOME") 
     }, 
-      // This looks for logo.png inside your assets folder on GitHub
       e("img", { 
         src: "./assets/rslogo.png", 
-        alt: "RS Logo", 
-        className: "h-10 w-auto object-contain" 
-      }),
+        alt: "Rising Sun Logo", 
+        className: "h-12 w-auto object-contain" // I slightly increased height to h-12 since it contains text
+      })
+    ), // This ) was missing in your code!
+    // --- Logo Section End ---
+
     e("div", { className: "hidden md:flex gap-8 font-bold text-xs uppercase tracking-widest text-gray-500" },
-      ["HOME", "ABOUT", "TEAM", "CONTACT"].map(t => e("button", { key: t, onClick: () => setTab(t), className: tab === t ? "text-orange-600 border-b-2 border-orange-600" : "hover:text-orange-600" }, t))
+      ["HOME", "ABOUT", "TEAM", "CONTACT"].map(t => 
+        e("button", { 
+          key: t, 
+          onClick: () => setTab(t), 
+          className: tab === t ? "text-orange-600 border-b-2 border-orange-600" : "hover:text-orange-600 transition" 
+        }, t)
+      )
     )
   )
 );
