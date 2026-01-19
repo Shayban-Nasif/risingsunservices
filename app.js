@@ -241,7 +241,7 @@ function App() {
 
   const HeroSlider = () => {
     const [curr, setCurr] = useState(0);
-    const slides = [{t: "Rising Sun TechLab", s: "Software Development & IT Academy", i: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600"}, {t: "Strategic Consulting", s: "DX & Business Growth", i: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1600"}, {t: "Automobiles", s: "Premium Vehicle Export", i: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=1600"}];
+    const slides = [{t: "Rising Sun TechLab", s: "Software Development & IT Academy", i: "./assets/cover.jpg"}, {t: "Strategic Consulting", s: "DX & Business Growth", i: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1600"}, {t: "Automobiles", s: "Premium Vehicle Export", i: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=1600"}];
     useEffect(() => { const t = setInterval(() => setCurr(s => (s + 1) % slides.length), 5000); return () => clearInterval(t); }, []);
     
     return e("div", { className: "relative h-[480px] bg-gray-900 overflow-hidden" },
