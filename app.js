@@ -230,14 +230,25 @@ function RisingSunAutomobiles({ onBack }) {
 function App() {
   const [tab, setTab] = useState("HOME");
 
-  const Nav = () => e("nav", { className: "bg-white border-b sticky top-0 z-50 p-4" },
-    e("div", { className: "max-w-6xl mx-auto flex justify-between items-center" },
-      e("div", { className: "text-xl font-bold text-orange-600 cursor-pointer flex items-center gap-2", onClick: () => setTab("HOME") }, "☀ Rising Sun Services"),
-      e("div", { className: "hidden md:flex gap-8 font-bold text-xs uppercase tracking-widest text-gray-500" },
-        ["HOME", "ABOUT", "TEAM", "CONTACT"].map(t => e("button", { key: t, onClick: () => setTab(t), className: tab === t ? "text-orange-600 border-b-2 border-orange-600" : "hover:text-orange-600" }, t))
-      )
+  const Nav = () => e("nav", { className: "bg-white border-b sticky top-0 z-50 p-4 shadow-sm" },
+  e("div", { className: "max-w-6xl mx-auto flex justify-between items-center" },
+    e("div", { 
+      className: "flex items-center gap-3 cursor-pointer", 
+      onClick: () => setTab("home") 
+    }, 
+      // This looks for logo.png inside your assets folder on GitHub
+      e("img", { 
+        src: "./assets/logo.png", 
+        alt: "RS Logo", 
+        className: "h-10 w-auto object-contain" 
+      }),
+      e("span", { className: "text-xl font-bold text-orange-600" }, "Rising Sun Services")
+    ),
+    e("div", { className: "hidden md:flex gap-8 font-bold text-xs uppercase tracking-widest text-gray-500" },
+      ["home", "about", "team", "contact"].map(t => e("button", { key: t, onClick: () => setTab(t), className: tab === t ? "text-orange-600 border-b-2 border-orange-600" : "hover:text-orange-600" }, t))
     )
-  );
+  )
+);
 
   const HeroSlider = () => {
     const [curr, setCurr] = useState(0);
