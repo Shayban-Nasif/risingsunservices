@@ -3,14 +3,19 @@ const { useState, useEffect } = React;
 
 // --- SHARED UI COMPONENTS ---
 
-function Card(title, subtitle, text, onClick) {
+function Card(title, subtitle, text, onClick, imageSrc) {
   return e(
     "div",
     {
       className: `bg-white border border-gray-100 rounded-xl shadow-sm p-6 text-center transition hover:shadow-lg hover:-translate-y-1 duration-300 ${onClick ? "cursor-pointer group" : ""}`,
       onClick: onClick
     },
-    e("div", { className: "w-16 h-16 bg-gray-100 text-orange-600 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl group-hover:bg-orange-600 group-hover:text-white transition duration-300" }, "★"),
+    // This logic checks: If there is an imageSrc, show the image. Otherwise, show the star.
+    e("div", { className: "w-16 h-16 bg-gray-100 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden group-hover:bg-orange-600 transition duration-300" },
+      imageSrc 
+        ? e("img", { src: imageSrc, className: "w-full h-full object-contain p-2" })
+        : e("span", { className: "text-2xl text-orange-600 group-hover:text-white" }, "★")
+    ),
     e("h3", { className: "text-xl font-bold text-gray-800" }, title),
     e("p", { className: "text-orange-600 text-sm mb-3 font-medium" }, subtitle),
     e("p", { className: "text-gray-500 text-sm leading-relaxed" }, text)
@@ -308,9 +313,14 @@ function App() {
         e("p", { className: "text-gray-600 text-lg leading-relaxed" }, "Rising Sun Services is the consumer brand of Asdiqa Co. Ltd., providing world-class technology, consulting, and automotive solutions. Our mission is to maintain Japanese standards of integrity and quality across all our global ventures.")
         ),
         e("section", { id: "services", className: "max-w-6xl mx-auto py-24 px-6" },
-          e("div", { className: "grid md:grid-cols-3 gap-8" },
+            e("div", { className: "grid md:grid-cols-3 gap-8" },
+            // 1. Consulting (Keep the star)
             Card("Consulting", "Business Strategy", "DX Support and System Planning.", () => setTab("consulting")),
-            Card("TechLab", "IT & Education", "Software development and IT workforce training.", () => setTab("techlab")),
+            
+            // 2. TechLab (Add your local logo path here)
+            Card("TechLab", "IT & Education", "Software development and IT workforce training.", () => setTab("techlab"), "./assets/rstechlablogo.png"),
+            
+            // 3. Automobiles (Keep the star)
             Card("Automobiles", "Vehicle Trade", "Export and domestic sales of cars.", () => setTab("autos"))
           )
         )
