@@ -10,7 +10,6 @@ function Card(title, subtitle, text, onClick, imageSrc) {
       className: `bg-white border border-gray-100 rounded-xl shadow-sm p-6 text-center transition hover:shadow-lg hover:-translate-y-1 duration-300 ${onClick ? "cursor-pointer group" : ""}`,
       onClick: onClick
     },
-    // This logic checks: If there is an imageSrc, show the image. Otherwise, show the star.
     e("div", { className: "w-16 h-16 bg-gray-100 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden group-hover:bg-orange-600 transition duration-300" },
       imageSrc 
         ? e("img", { src: imageSrc, className: "w-full h-full object-contain p-2" })
@@ -65,8 +64,213 @@ function SelectField({ label, options, value, onChange }) {
   );
 }
 
-// --- 1. RISING SUN CONSULTING PAGE ---
+// Portfolio Icons
+function CodeIcon() {
+  return e("svg", { className: "w-5 h-5", fill: "none", stroke: "currentColor", strokeWidth: "2", viewBox: "0 0 24 24" },
+    e("path", { d: "M8 9l-3 3 3 3M16 9l3 3-3 3M14 5l-4 14" })
+  );
+}
 
+function ExternalLinkIcon() {
+  return e("svg", { className: "w-4 h-4", fill: "none", stroke: "currentColor", strokeWidth: "2", viewBox: "0 0 24 24" },
+    e("path", { d: "M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" })
+  );
+}
+
+function ClockIcon() {
+  return e("svg", { className: "w-4 h-4", fill: "none", stroke: "currentColor", strokeWidth: "2", viewBox: "0 0 24 24" },
+    e("circle", { cx: "12", cy: "12", r: "10" }),
+    e("path", { d: "M12 6v6l4 2" })
+  );
+}
+
+function CheckIcon() {
+  return e("svg", { className: "w-4 h-4", fill: "none", stroke: "currentColor", strokeWidth: "2", viewBox: "0 0 24 24" },
+    e("path", { d: "M20 6L9 17l-5-5" })
+  );
+}
+
+// Portfolio Project Data
+const portfolioProjects = [
+  {
+    id: 1,
+    title: "RS Transport Solution",
+    category: "Transportation System",
+    description: "Real-time school transportation tracking system with live notifications for parents. Features GPS integration and instant alerts.",
+    image: "./assets/transport-system.jpg",
+    technologies: ["React", "GPS Tracking", "Push Notifications"],
+    link: "https://shayban-nasif.github.io/maktab-transport-system/",
+    status: "ongoing",
+    client: "Iqra International School Tokyo",
+    features: [
+      "Real-time vehicle tracking",
+      "Parent notifications",
+      "Route management",
+      "Student check-in/out"
+    ]
+  },
+  {
+    id: 2,
+    title: "Maktab Management System",
+    category: "Education Platform",
+    description: "Comprehensive school management platform handling student records, attendance, grades, and parent-teacher communication.",
+    image: "./assets/maktab-system.jpg",
+    technologies: ["Full-stack", "Database", "Analytics"],
+    link: "http://gakuin.makkimasjid.jp/",
+    status: "live",
+    features: [
+      "Student information system",
+      "Attendance tracking",
+      "Grade management",
+      "Parent communication"
+    ]
+  },
+  {
+    id: 3,
+    title: "Dr. Nabina Rahman - Blog",
+    category: "Content Platform",
+    description: "Professional blog platform with custom CMS, article management, and responsive design for medical professional content.",
+    image: "./assets/medical-blog.jpg",
+    technologies: ["React", "CMS", "SEO", "Analytics"],
+    link: "https://shayban-nasif.github.io/DrNabinaRahmanBlog/",
+    status: "review",
+    features: [
+      "Article publishing",
+      "Category management",
+      "Search functionality",
+      "Mobile responsive"
+    ]
+  }
+];
+
+// Portfolio Section Component
+function PortfolioSection() {
+  const [filter, setFilter] = useState('all');
+
+  const filteredProjects = filter === 'all' 
+    ? portfolioProjects 
+    : portfolioProjects.filter(p => p.status === filter);
+
+  const getStatusBadge = (status) => {
+    switch(status) {
+      case 'live':
+        return e("span", { className: "px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full flex items-center gap-1" },
+          e(CheckIcon, null), " LIVE"
+        );
+      case 'ongoing':
+        return e("span", { className: "px-3 py-1 bg-blue-500 text-white text-xs font-bold rounded-full flex items-center gap-1" },
+          e(ClockIcon, null), " ONGOING"
+        );
+      case 'review':
+        return e("span", { className: "px-3 py-1 bg-yellow-500 text-white text-xs font-bold rounded-full" }, "REVIEW");
+      default:
+        return null;
+    }
+  };
+
+  return e("section", { className: "py-16 px-6 max-w-7xl mx-auto" },
+    e("div", { className: "text-center mb-12" },
+      e("h2", { className: "text-4xl font-bold mb-4 text-gray-900" }, "Our Portfolio"),
+      e("p", { className: "text-xl text-gray-600 max-w-2xl mx-auto" },
+        "Showcasing our finest work in software development and digital solutions"
+      )
+    ),
+
+    // Filter Buttons
+    e("div", { className: "flex flex-wrap justify-center gap-4 mb-12" },
+      [
+        { label: "All Projects", value: "all" },
+        { label: "Live Projects", value: "live" },
+        { label: "Ongoing", value: "ongoing" },
+        { label: "In Review", value: "review" }
+      ].map(btn => 
+        e("button", {
+          key: btn.value,
+          onClick: () => setFilter(btn.value),
+          className: `px-6 py-2 rounded-full font-medium transition ${
+            filter === btn.value 
+              ? 'bg-orange-600 text-white' 
+              : 'bg-white text-gray-600 hover:bg-gray-100 border'
+          }`
+        }, btn.label)
+      )
+    ),
+
+    // Projects Grid
+    e("div", { className: "grid md:grid-cols-2 lg:grid-cols-3 gap-8" },
+      filteredProjects.map(project =>
+        e("div", { key: project.id, className: "bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition group" },
+          // Image Container with Status Badge
+          e("div", { className: "relative h-48 bg-gray-200 overflow-hidden" },
+            e("div", { className: "w-full h-full bg-gradient-to-br from-orange-100 to-orange-50 flex items-center justify-center" },
+              e("span", { className: "text-orange-600 font-bold" }, project.title.split(' ').map(w => w[0]).join(''))
+            ),
+            e("div", { className: "absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition" }),
+            e("div", { className: "absolute top-4 right-4" }, getStatusBadge(project.status))
+          ),
+
+          e("div", { className: "p-6" },
+            e("div", { className: "flex items-center gap-2 mb-2" },
+              e("span", { className: "text-sm font-medium text-orange-600 uppercase tracking-wider" }, project.category)
+            ),
+
+            e("h3", { className: "text-xl font-bold mb-2 text-gray-900" }, project.title),
+
+            project.client && 
+              e("p", { className: "text-sm text-gray-500 mb-2" },
+                e("span", { className: "font-medium" }, "Client:"), " ", project.client
+              ),
+
+            e("p", { className: "text-gray-600 mb-4 text-sm" }, project.description),
+
+            // Features
+            e("div", { className: "mb-4" },
+              e("h4", { className: "text-sm font-semibold text-gray-700 mb-2" }, "Key Features:"),
+              e("ul", { className: "text-xs text-gray-600 space-y-1" },
+                project.features.slice(0, 3).map((f, i) =>
+                  e("li", { key: i, className: "flex items-center gap-2" },
+                    e("span", { className: "w-1 h-1 bg-orange-600 rounded-full" }),
+                    f
+                  )
+                )
+              )
+            ),
+
+            // Technologies
+            e("div", { className: "flex flex-wrap gap-2 mb-4" },
+              project.technologies.map((tech, i) =>
+                e("span", { key: i, className: "px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded" }, tech)
+              )
+            ),
+
+            e("a", {
+              href: project.link,
+              target: "_blank",
+              rel: "noopener noreferrer",
+              className: "inline-flex items-center gap-2 text-orange-600 font-medium hover:text-orange-800 transition text-sm"
+            }, "View Project", e(ExternalLinkIcon, null))
+          )
+        )
+      )
+    ),
+
+    // Call to Action
+    e("div", { className: "mt-16 text-center" },
+      e("div", { className: "bg-gradient-to-r from-orange-600 to-orange-500 text-white p-12 rounded-2xl" },
+        e("h3", { className: "text-3xl font-bold mb-4" }, "Have a Project in Mind?"),
+        e("p", { className: "text-xl text-orange-100 mb-8 max-w-2xl mx-auto" },
+          "Let's bring your ideas to life with our expert development team"
+        ),
+        e("button", {
+          onClick: () => window.location.href = 'mailto:risingsunservices.jp@gmail.com',
+          className: "px-8 py-4 bg-white text-orange-600 font-bold rounded-lg hover:bg-gray-100 transition inline-flex items-center gap-2"
+        }, "Start Your Project", e(ExternalLinkIcon, null))
+      )
+    )
+  );
+}
+
+// --- 1. RISING SUN CONSULTING PAGE ---
 function RisingSunConsulting({ onBack }) {
   const [form, setForm] = useState({ name: "", businessName: "", address: "", contact: "", time: "", service: "Digital Transformation Support" });
 
@@ -105,9 +309,7 @@ function RisingSunConsulting({ onBack }) {
   );
 }
 
-
-// --- 2. RISING SUN TECHLAB PAGE (REFINED) ---
-
+// --- 2. RISING SUN TECHLAB PAGE ---
 function RisingSunTechLab({ onBack }) {
   const [subTab, setSubTab] = useState("dev");
   const techStack = ["React", "Node.js", "Python", "AWS", "Docker", "PostgreSQL"];
@@ -157,13 +359,12 @@ function RisingSunTechLab({ onBack }) {
 }
 
 // --- 3. RISING SUN AUTOMOBILES PAGE ---
-
 function RisingSunAutomobiles({ onBack }) {
   const [form, setForm] = useState({ 
     name: "", 
     address: "", 
     contact: "", 
-    service: "Budget Consultation", // Default value
+    service: "Budget Consultation",
     maker: "", 
     model: "", 
     budget: "", 
@@ -190,7 +391,6 @@ function RisingSunAutomobiles({ onBack }) {
     e("div", { className: "bg-white p-8 rounded-2xl shadow-xl border border-gray-100" },
       SectionHeader("Vehicle Inquiry & Consultation"),
       e("form", { onSubmit: handleSubmit },
-        // 1. Personal Info
         e("h4", { className: "font-bold text-gray-800 mb-4 border-b pb-2" }, "1. Customer Information"),
         e("div", { className: "grid md:grid-cols-2 gap-4" },
           InputField({ label: "Name", value: form.name, onChange: e => setForm({...form, name: e.target.value}) }),
@@ -198,21 +398,14 @@ function RisingSunAutomobiles({ onBack }) {
         ),
         InputField({ label: "Address", value: form.address, onChange: e => setForm({...form, address: e.target.value}) }),
 
-        // 2. Desired Service Dropdown
         e("h4", { className: "font-bold text-gray-800 mb-4 border-b pb-2 mt-6" }, "2. Service Type"),
         SelectField({ 
           label: "Desired Service", 
-          options: [
-            "Intra-Japan Car Sale", 
-            "Global Car Export", 
-            "Budget Consultation", 
-            "Other"
-          ], 
+          options: ["Intra-Japan Car Sale", "Global Car Export", "Budget Consultation", "Other"], 
           value: form.service, 
           onChange: e => setForm({...form, service: e.target.value}) 
         }),
 
-        // 3. Car Details
         e("h4", { className: "font-bold text-gray-800 mb-4 border-b pb-2 mt-6" }, "3. Vehicle Preferences"),
         e("div", { className: "grid md:grid-cols-3 gap-4 bg-gray-50 p-4 rounded-lg mb-4" },
           InputField({ label: "Maker", placeholder: "e.g. Toyota", value: form.maker, onChange: e => setForm({...form, maker: e.target.value}) }),
@@ -221,7 +414,6 @@ function RisingSunAutomobiles({ onBack }) {
         ),
         TextArea({ label: "Specific Requirements", placeholder: "Color, Year, Mileage...", value: form.details, onChange: e => setForm({...form, details: e.target.value}) }),
         
-        // 4. Meeting Info
         InputField({ label: "Preferred Meeting Time", type: "datetime-local", value: form.time, onChange: e => setForm({...form, time: e.target.value}) }),
         
         e("button", { className: "w-full bg-gray-900 hover:bg-black text-white font-bold py-3 rounded-lg transition mt-4 shadow-lg" }, "Send Vehicle Request")
@@ -231,40 +423,34 @@ function RisingSunAutomobiles({ onBack }) {
 }
 
 // --- MAIN APP ---
-
 function App() {
   const [tab, setTab] = useState("HOME");
 
-    const Nav = () => e("nav", { className: "bg-white border-b sticky top-0 z-50 p-4 shadow-sm" },
-  e("div", { className: "max-w-6xl mx-auto flex justify-between items-center" },
-    // --- Logo Section Start ---
-    e("div", { 
-      className: "flex items-center cursor-pointer", 
-      onClick: () => setTab("HOME") 
-    }, 
-      e("img", { 
-        src: "./assets/rslogo.png", 
-        alt: "Rising Sun Logo", 
-        className: "h-12 w-auto object-contain" // I slightly increased height to h-12 since it contains text
-      })
-    ), // This ) was missing in your code!
-    // --- Logo Section End ---
-
-    e("div", { className: "hidden md:flex gap-8 font-bold text-xs uppercase tracking-widest text-gray-500" },
-      ["HOME", "ABOUT", "TEAM", "CONTACT"].map(t => 
-        e("button", { 
-          key: t, 
-          onClick: () => setTab(t), 
-          className: tab === t ? "text-orange-600 border-b-2 border-orange-600" : "hover:text-orange-600 transition" 
-        }, t)
+  const Nav = () => e("nav", { className: "bg-white border-b sticky top-0 z-50 p-4 shadow-sm" },
+    e("div", { className: "max-w-6xl mx-auto flex justify-between items-center" },
+      e("div", { className: "flex items-center cursor-pointer", onClick: () => setTab("HOME") }, 
+        e("img", { src: "./assets/rslogo.png", alt: "Rising Sun Logo", className: "h-12 w-auto object-contain" })
+      ),
+      e("div", { className: "hidden md:flex gap-8 font-bold text-xs uppercase tracking-widest text-gray-500" },
+        ["HOME", "PORTFOLIO", "ABOUT", "TEAM", "CONTACT"].map(t => 
+          e("button", { 
+            key: t, 
+            onClick: () => setTab(t), 
+            className: tab === t ? "text-orange-600 border-b-2 border-orange-600" : "hover:text-orange-600 transition" 
+          }, t === "PORTFOLIO" ? e("span", { className: "flex items-center gap-1" }, e(CodeIcon, null), t) : t)
+        )
       )
     )
-  )
-);
+  );
 
   const HeroSlider = () => {
     const [curr, setCurr] = useState(0);
-    const slides = [{t: "Rising Sun TechLab", s: "Software Development & IT Academy", i: "./assets/cover.jpg"}, {t: "Strategic Consulting", s: "DX & Business Growth", i: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1600"}, {t: "Automobiles", s: "Premium Vehicle Export", i: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=1600"}];
+    const slides = [
+      {t: "Rising Sun TechLab", s: "Software Development & IT Academy", i: "./assets/cover.jpg"},
+      {t: "Strategic Consulting", s: "DX & Business Growth", i: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1600"},
+      {t: "Automobiles", s: "Premium Vehicle Export", i: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=1600"}
+    ];
+    
     useEffect(() => { const t = setInterval(() => setCurr(s => (s + 1) % slides.length), 5000); return () => clearInterval(t); }, []);
     
     return e("div", { className: "relative h-[480px] bg-gray-900 overflow-hidden" },
@@ -300,7 +486,7 @@ function App() {
     );
   }
   
-   return e("div", { className: "min-h-screen flex flex-col font-sans bg-gray-50" },
+  return e("div", { className: "min-h-screen flex flex-col font-sans bg-gray-50" },
     Nav(),
     e("main", { className: "flex-grow" },
       tab === "HOME" && e("div", null,
@@ -308,23 +494,21 @@ function App() {
         e(ServiceShortcutBar),
         e(StatsStrip),
         e("section", { className: "max-w-4xl mx-auto py-16 px-6 text-center" },
-        e("h2", { className: "text-sm font-bold text-orange-600 uppercase tracking-widest mb-4" }, "Introduction"),
-        e("h3", { className: "text-3xl font-bold mb-6" }, "Bridging Japan and the Global Market"),
-        e("p", { className: "text-gray-600 text-lg leading-relaxed" }, "Rising Sun Services is the consumer brand of Asdiqa Co. Ltd., providing world-class technology, consulting, and automotive solutions. Our mission is to maintain Japanese standards of integrity and quality across all our global ventures.")
+          e("h2", { className: "text-sm font-bold text-orange-600 uppercase tracking-widest mb-4" }, "Introduction"),
+          e("h3", { className: "text-3xl font-bold mb-6" }, "Bridging Japan and the Global Market"),
+          e("p", { className: "text-gray-600 text-lg leading-relaxed" }, 
+            "Rising Sun Services is the consumer brand of Asdiqa Co. Ltd., providing world-class technology, consulting, and automotive solutions. Our mission is to maintain Japanese standards of integrity and quality across all our global ventures."
+          )
         ),
         e("section", { id: "services", className: "max-w-6xl mx-auto py-24 px-6" },
-            e("div", { className: "grid md:grid-cols-3 gap-8" },
-            // 1. Consulting (Keep the star)
+          e("div", { className: "grid md:grid-cols-3 gap-8" },
             Card("Consulting", "Business Strategy", "DX Support and System Planning.", () => setTab("consulting")),
-            
-            // 2. TechLab (Add your local logo path here)
             Card("TechLab", "IT & Education", "Software development and IT workforce training.", () => setTab("techlab"), "./assets/rstechlablogo.png"),
-            
-            // 3. Automobiles (Keep the star)
             Card("Automobiles", "Vehicle Trade", "Export and domestic sales of cars.", () => setTab("autos"))
           )
         )
       ),
+      tab === "PORTFOLIO" && e(PortfolioSection, null),
       tab === "consulting" && e(RisingSunConsulting, { onBack: () => setTab("HOME") }),
       tab === "techlab" && e(RisingSunTechLab, { onBack: () => setTab("HOME") }),
       tab === "autos" && e(RisingSunAutomobiles, { onBack: () => setTab("HOME") }),
@@ -347,22 +531,20 @@ function App() {
           )
         )
       ),
-
       tab === "TEAM" && e("section", { className: "max-w-6xl mx-auto px-6 py-16 animate-fade-in text-center" },
         e("h2", { className: "text-4xl font-bold mb-12" }, "Our Leadership"),
         e("div", { className: "grid md:grid-cols-3 gap-8" },
-            Card("Mohammad Zakir Hossen", "Director", "15+ years experience in System Engineering."),
-            Card("Shayban Nasif", "Head of Operations", "Technology and Consulting specialist."),
-            Card("Abdullah Al Asif", "Executive Consultant", "Customer communications lead.")
+          Card("Mohammad Zakir Hossen", "Director", "15+ years experience in System Engineering."),
+          Card("Shayban Nasif", "Head of Operations", "Technology and Consulting specialist."),
+          Card("Abdullah Al Asif", "Executive Consultant", "Customer communications lead.")
         )
       ),
-
       tab === "CONTACT" && e("section", { className: "max-w-2xl mx-auto px-6 py-24 animate-fade-in text-center" },
         e("div", { className: "bg-white p-12 rounded-3xl shadow-xl border border-gray-100" },
-            e("h2", { className: "text-3xl font-bold mb-6" }, "Contact Us"),
-            e("p", { className: "text-xl text-orange-600 font-bold mb-2" }, "risingsunservices.jp@gmail.com"),
-            e("p", { className: "text-gray-500 mb-8" }, "Tokyo, Japan | +81 80-7307-2277"),
-            e("button", { className: "px-8 py-3 bg-gray-900 text-white rounded-full font-bold", onClick: () => window.location.href='mailto:risingsunservices.jp@gmail.com' }, "Send an Email")
+          e("h2", { className: "text-3xl font-bold mb-6" }, "Contact Us"),
+          e("p", { className: "text-xl text-orange-600 font-bold mb-2" }, "risingsunservices.jp@gmail.com"),
+          e("p", { className: "text-gray-500 mb-8" }, "Tokyo, Japan | +81 80-7307-2277"),
+          e("button", { className: "px-8 py-3 bg-gray-900 text-white rounded-full font-bold", onClick: () => window.location.href='mailto:risingsunservices.jp@gmail.com' }, "Send an Email")
         )
       )
     ),
