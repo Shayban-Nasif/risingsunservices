@@ -1,685 +1,856 @@
-const { useState, useEffect } = React;
+const { useState } = React;
 
-// --- ICON COMPONENTS ---
-function GlobeIcon() {
-  return React.createElement("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", strokeWidth: "1.5", viewBox: "0 0 24 24" },
-    React.createElement("circle", { cx: "12", cy: "12", r: "10" }),
-    React.createElement("path", { d: "M2 12h20M12 2a15 15 0 010 20" })
-  );
-}
+// ─── CONSTANTS ────────────────────────────────────────────────────────────────
+const PHONE = "+81 80-7307-2277";
+const WA_NUMBER = "818073072277";
+const WA_LINK = `https://wa.me/${WA_NUMBER}`;
+const EMAIL = "risingsunservices.jp@gmail.com";
+const QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(WA_LINK)}&margin=10`;
 
-function ArrowRightIcon() {
-  return React.createElement("svg", { className: "w-4 h-4", fill: "none", stroke: "currentColor", strokeWidth: "2", viewBox: "0 0 24 24" },
-    React.createElement("path", { d: "M5 12h14M13 5l7 7-7 7" })
-  );
-}
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const carWorkflow = [
+  { step: 1, icon: "📝", title: "Primary Inquiry",      desc: "Submit your requirements and budget via our inquiry form or WhatsApp." },
+  { step: 2, icon: "💬", title: "Consultation",         desc: "Email or online meeting to fix the right vehicle and finalize budget." },
+  { step: 3, icon: "🔍", title: "Auction Search",       desc: "We search Japan's car auctions for your exact specification." },
+  { step: 4, icon: "💳", title: "Transaction",          desc: "Secure payment procedure, invoicing, and export documentation." },
+  { step: 5, icon: "🚢", title: "Shipping",             desc: "Vehicle loaded at Japan port and shipped to destination." },
+  { step: 6, icon: "⚓", title: "Port Clearance",       desc: "Customs clearance handled at the destination port." },
+  { step: 7, icon: "📋", title: "BRTA Processing",      desc: "Vehicle registration with BRTA for Bangladesh customers." },
+  { step: 8, icon: "🏠", title: "Home Delivery",        desc: "Your vehicle delivered to your doorstep. Drive away!" },
+];
 
-function CodeIcon() {
-  return React.createElement("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", strokeWidth: "1.5", viewBox: "0 0 24 24" },
-    React.createElement("path", { d: "M8 9l-3 3 3 3M16 9l3 3-3 3M14 5l-4 14" })
-  );
-}
+const showcaseCars = [
+  { make: "Toyota", model: "Alphard", year: "2022", price: "¥4,500,000~", km: "22,000 km", color: "Pearl White", fuel: "Hybrid", img: "https://via.placeholder.com/480x300/1e293b/94a3b8?text=Toyota+Alphard+2022" },
+  { make: "Toyota", model: "Land Cruiser", year: "2021", price: "¥7,200,000~", km: "35,000 km", color: "Black", fuel: "Diesel", img: "https://via.placeholder.com/480x300/0f172a/94a3b8?text=Toyota+Land+Cruiser+2021" },
+  { make: "Toyota", model: "Hiace Van", year: "2020", price: "¥2,800,000~", km: "48,000 km", color: "Silver", fuel: "Diesel", img: "https://via.placeholder.com/480x300/1e293b/94a3b8?text=Toyota+Hiace+2020" },
+  { make: "Honda",  model: "Freed",    year: "2023", price: "¥1,900,000~", km: "12,000 km", color: "Blue", fuel: "Hybrid", img: "https://via.placeholder.com/480x300/0f172a/94a3b8?text=Honda+Freed+2023" },
+];
 
-function ExternalLinkIcon() {
-  return React.createElement("svg", { className: "w-4 h-4", fill: "none", stroke: "currentColor", strokeWidth: "2", viewBox: "0 0 24 24" },
-    React.createElement("path", { d: "M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" })
-  );
-}
+const electronicsCategories = [
+  { icon: "📱", title: "Smartphones & Tablets",    desc: "Latest models, new and pre-owned.",               brands: "Apple · Samsung · Sony · Sharp" },
+  { icon: "💻", title: "Laptops & Computers",      desc: "Business and personal use, new and refurbished.", brands: "Apple · Dell · Lenovo · HP · Panasonic" },
+  { icon: "🖥️",  title: "Servers & Networking",    desc: "Enterprise servers, NAS, switches, routers.",     brands: "HP · Dell · Cisco · Synology · Buffalo" },
+  { icon: "🎧", title: "Accessories & Peripherals",desc: "Monitors, keyboards, cables, storage, memory.",   brands: "Genuine & OEM Parts" },
+];
 
-function RobotIcon() {
-  return React.createElement("svg", { className: "w-8 h-8", fill: "none", stroke: "currentColor", strokeWidth: "1.5", viewBox: "0 0 24 24" },
-    React.createElement("rect", { x: "3", y: "8", width: "18", height: "12", rx: "2" }),
-    React.createElement("circle", { cx: "12", cy: "15", r: "2" }),
-    React.createElement("path", { d: "M8 5h8M8 5v3M16 5v3" })
-  );
-}
+const tourServices = [
+  { icon: "✈️", title: "Airport Transfer",      desc: "Seamless pickup and drop-off at Narita, Haneda, Kansai, and major airports across Japan." },
+  { icon: "🗼", title: "City Tour Guidance",    desc: "Expert guided tours of Tokyo, Osaka, Kyoto, Nara, Hiroshima, and more." },
+  { icon: "🏔️", title: "Day Trip Planning",    desc: "Mount Fuji, Nikko, Hakone, Kamakura — we plan perfect day trips from major cities." },
+  { icon: "📅", title: "Custom Itinerary",      desc: "Share your dates, interests, and budget — we build a personalized Japan travel plan." },
+  { icon: "🏨", title: "Hotel & Dining",        desc: "Curated recommendations and reservations for hotels, ryokans, and authentic local restaurants." },
+  { icon: "🎌", title: "Cultural Experiences",  desc: "Tea ceremonies, kimono fitting, temple visits, local festivals — authentic Japan." },
+];
 
-function ShoppingCartIcon() {
-  return React.createElement("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", strokeWidth: "1.5", viewBox: "0 0 24 24" },
-    React.createElement("circle", { cx: "9", cy: "21", r: "1" }),
-    React.createElement("circle", { cx: "20", cy: "21", r: "1" }),
-    React.createElement("path", { d: "M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" })
-  );
-}
-
-function ChartIcon() {
-  return React.createElement("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", strokeWidth: "1.5", viewBox: "0 0 24 24" },
-    React.createElement("path", { d: "M21 21H4V4" }),
-    React.createElement("path", { d: "M7 15l3-3 3 3 5-5" })
-  );
-}
-
-function SmartphoneIcon() {
-  return React.createElement("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", strokeWidth: "1.5", viewBox: "0 0 24 24" },
-    React.createElement("rect", { x: "5", y: "2", width: "14", height: "20", rx: "2", ry: "2" }),
-    React.createElement("line", { x1: "12", y1: "18", x2: "12", y2: "18" })
-  );
-}
-
-function CheckIcon() {
-  return React.createElement("svg", { className: "w-5 h-5 text-green-500", fill: "none", stroke: "currentColor", strokeWidth: "2", viewBox: "0 0 24 24" },
-    React.createElement("path", { d: "M20 6L9 17l-5-5" })
-  );
-}
-
-// --- SHARED COMPONENTS ---
-function Card({ title, price, description, features, icon, onClick, highlight }) {
-  return React.createElement("div", { 
-    className: `bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition transform hover:-translate-y-2 ${highlight ? 'ring-2 ring-orange-500 ring-offset-2' : ''}` 
+const itServices = [
+  {
+    title: "Website / Homepage Design", price: "¥50,000~",
+    desc: "Professional, responsive website tailored to your brand.",
+    features: ["5 Pages Included", "Mobile Responsive", "SEO Optimized", "Contact Form Integration", "1 Month Free Support"],
   },
-    React.createElement("div", { className: `p-6 ${highlight ? 'bg-gradient-to-r from-orange-500 to-orange-600' : 'bg-gradient-to-r from-gray-900 to-gray-800'} text-white` },
-      React.createElement("div", { className: "w-12 h-12 mb-4" }, React.createElement(icon, null)),
-      React.createElement("h3", { className: "text-xl font-bold mb-1" }, title),
-      React.createElement("div", { className: "text-2xl font-bold text-yellow-300" }, price)
-    ),
-    React.createElement("div", { className: "p-6" },
-      React.createElement("p", { className: "text-gray-600 text-sm mb-4" }, description),
-      React.createElement("ul", { className: "space-y-2 mb-6" },
-        features.map((feature, i) => 
-          React.createElement("li", { key: i, className: "text-sm text-gray-600 flex items-start gap-2" },
-            React.createElement(CheckIcon, null),
-            feature
-          )
-        )
-      ),
-      React.createElement("button", { 
-        onClick: onClick,
-        className: `w-full py-3 rounded-lg font-bold transition flex items-center justify-center gap-2 ${highlight ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-gray-900 hover:bg-gray-800 text-white'}` 
-      }, "Inquire Now", React.createElement(ArrowRightIcon, null))
-    )
+  {
+    title: "E-Commerce Development", price: "¥500,000~",
+    desc: "Full-featured online store with payment gateway integration.",
+    features: ["Product Catalog", "Shopping Cart", "Payment Gateway", "Order Management", "Admin Dashboard"],
+    highlight: true,
+  },
+  {
+    title: "Business Management System", price: "¥200,000~",
+    desc: "Streamline your operations with a custom business system.",
+    features: ["Inventory Management", "Employee Tracking", "Report Generation", "Analytics Dashboard", "Multi-user Access"],
+  },
+  {
+    title: "Educational Management System", price: "¥200,000~",
+    desc: "Complete digital solution for schools and institutions.",
+    features: ["Student Records", "Attendance System", "Grade Management", "Parent Portal", "Communication Tools"],
+  },
+];
+
+const roboticsCourses = [
+  { level: "Beginner (Age 7–9)",    price: "¥30,000/month", duration: "3 months", topics: ["Intro to Robotics", "Block Programming", "Simple Circuits", "Basic Sensors"] },
+  { level: "Intermediate (Age 10–12)", price: "¥35,000/month", duration: "3 months", topics: ["Arduino Basics", "Coding Fundamentals", "Motor Control", "LED Projects"] },
+  { level: "Advanced (Age 13–15)", price: "¥40,000/month", duration: "3 months", topics: ["Advanced Arduino", "Python Programming", "AI Concepts", "Competition Prep"] },
+];
+
+// ─── SHARED UI ────────────────────────────────────────────────────────────────
+function SectionHeader({ title, subtitle, light = false }) {
+  return (
+    <div className="text-center mb-12">
+      <h2 className={`text-4xl font-black mb-4 ${light ? "text-white" : "text-gray-900"}`}>{title}</h2>
+      {subtitle && <p className={`text-lg max-w-2xl mx-auto ${light ? "text-gray-300" : "text-gray-500"}`}>{subtitle}</p>}
+    </div>
   );
 }
 
-function SectionHeader({ title, subtitle }) {
-  return React.createElement("div", { className: "text-center mb-12" },
-    React.createElement("h2", { className: "text-4xl font-bold mb-4 text-gray-900" }, title),
-    React.createElement("p", { className: "text-xl text-gray-600 max-w-2xl mx-auto" }, subtitle)
+function Chip({ label }) {
+  return <span className="inline-block bg-orange-100 text-orange-700 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">{label}</span>;
+}
+
+function WaBtn({ cls = "" }) {
+  return (
+    <a href={WA_LINK} target="_blank" rel="noopener noreferrer"
+      className={`inline-flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl transition ${cls}`}>
+      <span>📱</span> WhatsApp Us
+    </a>
   );
 }
 
-// --- MAIN APP ---
-function App() {
-  const [activeTab, setActiveTab] = useState('home');
-  const [selectedService, setSelectedService] = useState(null);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    service: '',
-    message: ''
-  });
+// ─── CONTACT BAR (top strip) ──────────────────────────────────────────────────
+function ContactBar() {
+  return (
+    <div className="bg-gray-950 text-gray-400 py-2 px-4 text-xs">
+      <div className="max-w-7xl mx-auto flex flex-wrap justify-center md:justify-between items-center gap-3">
+        <span>
+          A brand of{" "}
+          <a href="https://asdiqa.jp" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 font-semibold">
+            Asdiqa Co. Ltd.
+          </a>{" "}
+          — Registered in Japan
+        </span>
+        <div className="flex items-center gap-5">
+          <a href={`mailto:${EMAIL}`} className="hover:text-white transition flex items-center gap-1">
+            ✉ {EMAIL}
+          </a>
+          <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="text-green-400 hover:text-green-300 transition flex items-center gap-1">
+            📱 {PHONE}
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-  // Navigation Component
-  const Nav = () => {
-    return React.createElement("nav", { className: "bg-white border-b sticky top-0 z-50 p-4 shadow-sm" },
-      React.createElement("div", { className: "max-w-7xl mx-auto flex justify-between items-center" },
-        React.createElement("div", { className: "flex items-center cursor-pointer", onClick: () => setActiveTab('home') }, 
-          React.createElement("img", { src: "./assets/rslogo.png", alt: "Rising Sun Logo", className: "h-12 w-auto object-contain" })
-        ),
-        React.createElement("div", { className: "hidden md:flex gap-8 font-bold text-xs uppercase tracking-widest text-gray-500" },
-          [
-            { label: "HOME", value: "home" },
-            { label: "SERVICES", value: "services" },
-            { label: "ROBOTICS", value: "robotics" },
-            { label: "PORTFOLIO", value: "portfolio" },
-            { label: "CONTACT", value: "contact" }
-          ].map(item => 
-            React.createElement("button", { 
-              key: item.value,
-              onClick: () => setActiveTab(item.value), 
-              className: activeTab === item.value ? "text-orange-600 border-b-2 border-orange-600" : "hover:text-orange-600 transition" 
-            }, item.label)
-          )
-        )
-      )
-    );
-  };
+// ─── NAV ──────────────────────────────────────────────────────────────────────
+function Nav({ active, go }) {
+  const [open, setOpen] = useState(false);
+  const tabs = [
+    { label: "Home",           value: "home" },
+    { label: "RS Tech Lab",    value: "techlab" },
+    { label: "RS Cars",        value: "cars" },
+    { label: "RS Electronics", value: "electronics" },
+    { label: "RS Tours",       value: "tours" },
+    { label: "Contact",        value: "contact" },
+  ];
+  const navigate = (v) => { go(v); setOpen(false); };
 
-  // IT Services Data
-  const itServices = [
-    {
-      icon: GlobeIcon,
-      title: "Website/Homepage Design",
-      price: "¥50,000~",
-      description: "Professional, responsive website design tailored to your brand",
-      features: [
-        "5 Pages Included",
-        "Mobile Responsive",
-        "SEO Optimized",
-        "Contact Form Integration",
-        "1 Month Support"
-      ]
-    },
-    {
-      icon: ShoppingCartIcon,
-      title: "E-Commerce Development",
-      price: "¥500,000~",
-      description: "Full-featured online store with payment gateway integration",
-      features: [
-        "Product Catalog",
-        "Shopping Cart",
-        "Payment Gateway",
-        "Order Management",
-        "Admin Dashboard"
-      ],
-      highlight: true
-    },
-    {
-      icon: ChartIcon,
-      title: "Business Management System",
-      price: "¥200,000~",
-      description: "Comprehensive system to streamline business operations",
-      features: [
-        "Inventory Management",
-        "Employee Tracking",
-        "Report Generation",
-        "Analytics Dashboard",
-        "Multi-user Access"
-      ]
-    },
-    {
-      icon: SmartphoneIcon,
-      title: "Educational Management System",
-      price: "¥200,000~",
-      description: "Complete solution for schools and educational institutions",
-      features: [
-        "Student Records",
-        "Attendance System",
-        "Grade Management",
-        "Parent Portal",
-        "Communication Tools"
-      ]
-    }
+  return (
+    <nav className="bg-white border-b sticky top-0 z-50 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <button onClick={() => navigate("home")} className="focus:outline-none">
+          <img src="./assets/rslogo.png" alt="Rising Sun Services" className="h-11 w-auto object-contain" />
+        </button>
+
+        {/* Desktop */}
+        <div className="hidden lg:flex gap-1 text-xs font-bold uppercase tracking-wider">
+          {tabs.map(t => (
+            <button key={t.value} onClick={() => navigate(t.value)}
+              className={`px-3 py-2 rounded-lg transition ${active === t.value ? "text-orange-600 bg-orange-50" : "text-gray-500 hover:text-orange-600 hover:bg-gray-50"}`}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Mobile toggle */}
+        <button className="lg:hidden p-2 rounded-lg hover:bg-gray-100" onClick={() => setOpen(!open)}>
+          {open ? (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
+      </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="lg:hidden border-t bg-white divide-y">
+          {tabs.map(t => (
+            <button key={t.value} onClick={() => navigate(t.value)}
+              className={`block w-full text-left px-5 py-4 text-sm font-bold uppercase tracking-wider transition ${active === t.value ? "text-orange-600 bg-orange-50" : "text-gray-600 hover:bg-gray-50"}`}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </nav>
+  );
+}
+
+// ─── FOOTER ───────────────────────────────────────────────────────────────────
+function Footer({ go }) {
+  return (
+    <footer className="bg-gray-950 text-gray-400 pt-14 pb-8">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid md:grid-cols-5 gap-10 mb-10">
+          <div className="md:col-span-2">
+            <img src="./assets/rslogo.png" alt="Rising Sun Services" className="h-10 w-auto mb-4 brightness-0 invert" />
+            <p className="text-sm mb-4 leading-relaxed">
+              Multi-domain business bridging Japan and the world — IT development, automotive, electronics, and tourism, all under one trusted brand.
+            </p>
+            <p className="text-sm">
+              A brand of{" "}
+              <a href="https://asdiqa.jp" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 font-semibold">
+                Asdiqa Co. Ltd.
+              </a>
+            </p>
+          </div>
+          <div>
+            <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">Divisions</h4>
+            <ul className="space-y-2 text-sm">
+              {[["techlab","RS Tech Lab"],["cars","RS Cars"],["electronics","RS Electronics"],["tours","RS Tours"]].map(([v,l]) => (
+                <li key={v}>
+                  <button onClick={() => go(v)} className="hover:text-white transition">{l}</button>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">Quick Links</h4>
+            <ul className="space-y-2 text-sm">
+              <li><button onClick={() => go("home")} className="hover:text-white transition">Home</button></li>
+              <li><button onClick={() => go("contact")} className="hover:text-white transition">Contact</button></li>
+              <li>
+                <a href="https://asdiqa.jp" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
+                  Asdiqa Co. Ltd.
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">Contact</h4>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="text-green-400 hover:text-green-300 transition flex items-center gap-2">
+                  <span>📱</span> {PHONE}
+                </a>
+              </li>
+              <li>
+                <a href={`mailto:${EMAIL}`} className="text-orange-400 hover:text-orange-300 transition flex items-center gap-2">
+                  <span>✉</span> {EMAIL}
+                </a>
+              </li>
+              <li className="flex items-center gap-2 text-gray-500">
+                <span>📍</span> Tokyo, Japan
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="border-t border-gray-800 pt-6 text-center text-xs text-gray-600">
+          © 2026 Rising Sun Services ·{" "}
+          <a href="https://asdiqa.jp" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:text-orange-400">
+            Asdiqa Co. Ltd.
+          </a>{" "}
+          · All rights reserved
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+// ─── HOME TAB ─────────────────────────────────────────────────────────────────
+function HomeTab({ go }) {
+  const divisions = [
+    { key: "techlab",    label: "RS Tech Lab",    icon: "💻", grad: "from-blue-900 to-blue-700",       desc: "IT System Development · Website Design · Robotics Education for Kids" },
+    { key: "cars",       label: "RS Cars",         icon: "🚗", grad: "from-red-900 to-red-700",         desc: "Japan Car Export · Local Sales · Auction Sourcing · Door-to-Door Delivery" },
+    { key: "electronics",label: "RS Electronics",  icon: "📱", grad: "from-purple-900 to-purple-700",   desc: "Smartphones · Laptops · Servers · Accessories — Local & Export" },
+    { key: "tours",      label: "RS Tours",        icon: "🗼", grad: "from-emerald-900 to-emerald-700", desc: "Japan Tour Consultancy · Custom Itineraries · Cultural Experiences" },
   ];
 
-  // Robotics Course Data
-  const roboticsCourses = [
-    {
-      level: "Beginner (Age 7-9)",
-      duration: "3 months",
-      price: "¥30,000/month",
-      topics: ["Introduction to Robotics", "Block Programming", "Simple Circuits", "Basic Sensors"]
-    },
-    {
-      level: "Intermediate (Age 10-12)",
-      duration: "3 months",
-      price: "¥35,000/month",
-      topics: ["Arduino Basics", "Coding Fundamentals", "Motor Control", "LED Projects"]
-    },
-    {
-      level: "Advanced (Age 13-15)",
-      duration: "3 months",
-      price: "¥40,000/month",
-      topics: ["Advanced Arduino", "Python Programming", "AI Concepts", "Competition Prep"]
-    }
-  ];
+  return (
+    <div>
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-gray-950 via-gray-900 to-orange-950 text-white py-28 px-6">
+        <div className="max-w-5xl mx-auto text-center">
+          <p className="text-orange-400 font-bold uppercase tracking-widest text-sm mb-5">
+            Japan · Bangladesh · Global
+          </p>
+          <h1 className="text-6xl md:text-7xl font-black mb-6 leading-tight">
+            Rising Sun<br />
+            <span className="text-orange-400">Services</span>
+          </h1>
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10">
+            Your trusted partner across IT, Automotive, Electronics, and Tourism — bridging Japan and Bangladesh.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <WaBtn />
+            <button onClick={() => go("contact")}
+              className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition">
+              Send Inquiry
+            </button>
+          </div>
+        </div>
+      </section>
 
-  // Portfolio Projects
-  const projects = [
-    {
-      id: 1,
-      title: "RS Transport Solution",
-      category: "Transportation System",
-      description: "Real-time school transportation tracking system with live notifications",
-      image: "https://via.placeholder.com/600x400/1e293b/ffffff?text=Transport+System",
-      link: "https://shayban-nasif.github.io/maktab-transport-system/",
-      status: "ongoing"
-    },
-    {
-      id: 2,
-      title: "Maktab Management System",
-      category: "Education Platform",
-      description: "Comprehensive school management platform",
-      image: "https://via.placeholder.com/600x400/0f172a/ffffff?text=Maktab+System",
-      link: "http://gakuin.makkimasjid.jp/",
-      status: "live"
-    },
-    {
-      id: 3,
-      title: "Dr. Nabina Rahman Blog",
-      category: "Content Platform",
-      description: "Professional blog platform with custom CMS",
-      image: "https://via.placeholder.com/600x400/334155/ffffff?text=Medical+Blog",
-      link: "https://shayban-nasif.github.io/DrNabinaRahmanBlog/",
-      status: "review"
-    }
-  ];
+      {/* Division cards */}
+      <section className="py-20 px-6 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader title="Our Divisions" subtitle="Four specialized businesses under one trusted brand" />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {divisions.map(d => (
+              <button key={d.key} onClick={() => go(d.key)}
+                className="text-left rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 group">
+                <div className={`bg-gradient-to-br ${d.grad} p-8 text-white min-h-[200px] flex flex-col`}>
+                  <div className="text-5xl mb-4">{d.icon}</div>
+                  <h3 className="text-xl font-black mb-2">{d.label}</h3>
+                  <p className="text-sm text-white/65 flex-1">{d.desc}</p>
+                </div>
+                <div className="bg-white px-5 py-3 flex items-center justify-between text-orange-600 font-bold text-sm border-t">
+                  <span>Explore</span>
+                  <span className="group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
 
-  // Handle Inquiry Form
-  const handleInquiry = (service) => {
-    setSelectedService(service);
-    setActiveTab('inquiry');
-    setFormData({...formData, service: service});
-  };
+      {/* Contact strip with QR */}
+      <section className="py-16 px-6 bg-gray-900 text-white">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+          <div>
+            <h3 className="text-3xl font-black mb-3">Get in Touch</h3>
+            <p className="text-gray-400 mb-7">Scan the QR code or tap to start a WhatsApp conversation.</p>
+            <div className="space-y-4">
+              <a href={WA_LINK} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-3 text-green-400 hover:text-green-300 font-bold text-lg transition">
+                <span>📱</span> {PHONE}
+              </a>
+              <a href={`mailto:${EMAIL}`}
+                className="flex items-center gap-3 text-orange-400 hover:text-orange-300 font-bold transition">
+                <span>✉</span> {EMAIL}
+              </a>
+              <p className="flex items-center gap-3 text-gray-500">
+                <span>📍</span> Tokyo, Japan
+              </p>
+            </div>
+          </div>
+          <div className="flex-shrink-0 bg-white p-4 rounded-2xl shadow-2xl text-center">
+            <img src={QR_URL} alt="WhatsApp QR Code" className="w-40 h-40" />
+            <p className="text-gray-500 text-xs mt-2 font-semibold">Scan to WhatsApp</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Asdiqa strip */}
+      <section className="py-6 bg-gray-100 text-center">
+        <p className="text-gray-500 text-sm">
+          Rising Sun Services is a brand of{" "}
+          <a href="https://asdiqa.jp" target="_blank" rel="noopener noreferrer" className="text-orange-600 font-bold hover:text-orange-700">
+            Asdiqa Co. Ltd.
+          </a>
+          {" "}— Registered in Japan
+        </p>
+      </section>
+    </div>
+  );
+}
+
+// ─── TECH LAB TAB ─────────────────────────────────────────────────────────────
+function TechLabTab({ go }) {
+  return (
+    <div>
+      <section className="bg-gradient-to-r from-blue-950 to-blue-700 text-white py-16 px-6">
+        <div className="max-w-7xl mx-auto flex items-center gap-6">
+          <img src="./assets/rstechlablogo.png" alt="RS Tech Lab" className="h-16 w-auto object-contain hidden md:block" />
+          <div>
+            <Chip label="IT · Education" />
+            <h1 className="text-4xl font-black">RS Tech Lab</h1>
+            <p className="text-blue-200 mt-2 text-lg">Professional IT development & robotics education — Tokyo, Japan</p>
+          </div>
+        </div>
+      </section>
+
+      {/* IT Services */}
+      <section className="py-20 px-6 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader title="IT Development Services" subtitle="Custom solutions with transparent pricing and quality assurance" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {itServices.map((s, i) => (
+              <div key={i} className={`rounded-2xl overflow-hidden shadow-lg transition hover:shadow-xl ${s.highlight ? "ring-2 ring-orange-500 ring-offset-2" : ""}`}>
+                <div className={`p-6 text-white ${s.highlight ? "bg-gradient-to-br from-orange-500 to-orange-600" : "bg-gray-900"}`}>
+                  <h3 className="text-base font-bold mb-1">{s.title}</h3>
+                  <div className="text-2xl font-black text-yellow-300 mt-2">{s.price}</div>
+                </div>
+                <div className="bg-white p-6">
+                  <p className="text-gray-500 text-sm mb-4">{s.desc}</p>
+                  <ul className="space-y-2 mb-6">
+                    {s.features.map((f, j) => (
+                      <li key={j} className="text-sm text-gray-600 flex items-start gap-2">
+                        <span className="text-green-500 mt-0.5">✓</span> {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <button onClick={() => go("contact")}
+                    className={`w-full py-2.5 rounded-lg font-bold text-sm transition ${s.highlight ? "bg-orange-500 hover:bg-orange-600 text-white" : "bg-gray-900 hover:bg-gray-800 text-white"}`}>
+                    Inquire Now →
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-sm text-blue-800 bg-blue-50 border border-blue-100 p-4 rounded-xl mt-8">
+            <strong>Note:</strong> All prices are starting estimates. Final quote depends on requirements and project scope. Free initial consultation available.
+          </p>
+        </div>
+      </section>
+
+      {/* Robotics */}
+      <section className="py-20 px-6 bg-orange-50">
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader title="Robotics for Kids" subtitle="Nurturing future innovators through hands-on STEM education" />
+          <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl p-10 mb-12">
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="text-7xl">🤖</div>
+              <div>
+                <h3 className="text-2xl font-black mb-2">Ages 7–15 · Tokyo, Japan</h3>
+                <p className="text-orange-100 mb-6">
+                  Build real robots, learn to code, and develop STEM skills through fun hands-on projects. No prior experience needed.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {["No Experience Needed","All Materials Provided","Small Classes","Certificates Awarded"].map(t => (
+                    <span key={t} className="bg-white/20 text-white text-sm font-bold px-4 py-1.5 rounded-full">{t}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
+            {roboticsCourses.map((c, i) => (
+              <div key={i} className="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div className="bg-gray-900 text-white p-6">
+                  <h4 className="text-lg font-bold mb-1">{c.level}</h4>
+                  <div className="text-orange-400 font-black text-xl mt-2">{c.price}</div>
+                  <div className="text-gray-400 text-sm mt-1">{c.duration}</div>
+                </div>
+                <div className="p-6">
+                  <ul className="space-y-2 mb-6">
+                    {c.topics.map((t, j) => (
+                      <li key={j} className="text-sm text-gray-600 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 bg-orange-500 rounded-full flex-shrink-0"></span> {t}
+                      </li>
+                    ))}
+                  </ul>
+                  <button onClick={() => go("contact")}
+                    className="w-full py-2.5 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600 transition text-sm">
+                    Enroll Now
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="bg-white rounded-2xl p-8 shadow-sm">
+            <h4 className="text-xl font-black mb-6 text-center text-gray-800">Course Schedule</h4>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="text-center p-6 bg-gray-50 rounded-xl">
+                <div className="text-3xl mb-3">📅</div>
+                <h5 className="font-bold mb-2">Weekend Classes</h5>
+                <p className="text-gray-500 text-sm">Saturdays · 10:00–12:00 / 13:00–15:00</p>
+              </div>
+              <div className="text-center p-6 bg-gray-50 rounded-xl">
+                <div className="text-3xl mb-3">🗓️</div>
+                <h5 className="font-bold mb-2">Weekday Classes</h5>
+                <p className="text-gray-500 text-sm">Wednesdays & Fridays · 16:00–18:00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// ─── CARS TAB ─────────────────────────────────────────────────────────────────
+function CarsTab({ go }) {
+  return (
+    <div>
+      <section className="bg-gradient-to-r from-red-950 to-red-800 text-white py-16 px-6">
+        <div className="max-w-7xl mx-auto">
+          <Chip label="Japan · Bangladesh · Export" />
+          <h1 className="text-4xl font-black mb-2">RS Cars</h1>
+          <p className="text-red-200 text-lg">Quality Japanese vehicles — sourced from auctions, delivered to your door</p>
+        </div>
+      </section>
+
+      {/* Showcase */}
+      <section className="py-20 px-6 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader title="Featured Vehicles" subtitle="Sample stock — contact us for current availability, full specs, and pricing" />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {showcaseCars.map((car, i) => (
+              <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition group">
+                <div className="overflow-hidden h-44">
+                  <img src={car.img} alt={`${car.make} ${car.model}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                </div>
+                <div className="p-5">
+                  <div className="text-xs font-bold text-gray-400 uppercase tracking-wider">{car.year}</div>
+                  <h3 className="text-xl font-black mt-1">{car.make} {car.model}</h3>
+                  <div className="text-orange-600 font-black text-2xl mt-1">{car.price}</div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {[car.km, car.color, car.fuel].map(tag => (
+                      <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-lg font-medium">{tag}</span>
+                    ))}
+                  </div>
+                  <button onClick={() => go("contact")}
+                    className="mt-4 w-full py-2.5 bg-red-800 hover:bg-red-900 text-white rounded-xl font-bold text-sm transition">
+                    Inquire →
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-10 p-6 bg-white rounded-2xl shadow-sm">
+            <p className="text-gray-500 text-sm">
+              Don't see your ideal vehicle?{" "}
+              <button onClick={() => go("contact")} className="text-orange-600 font-bold hover:underline">
+                Contact us
+              </button>
+              {" "}— we source vehicles to your exact specification directly from Japan's car auctions.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Workflow */}
+      <section className="py-20 px-6 bg-gray-950 text-white">
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader
+            light
+            title="How It Works"
+            subtitle="From Japan's auctions to your doorstep — a clear, transparent process"
+          />
+
+          {/* Desktop 4+4 snake */}
+          <div className="hidden md:block">
+            <div className="grid grid-cols-4 gap-4 mb-3">
+              {carWorkflow.slice(0, 4).map((step, i) => (
+                <div key={step.step} className="relative">
+                  <div className="bg-gray-800 hover:bg-gray-700 transition rounded-2xl p-6 text-center h-full">
+                    <div className="text-4xl mb-3">{step.icon}</div>
+                    <div className="w-7 h-7 bg-orange-500 text-white text-xs font-black rounded-full flex items-center justify-center mx-auto mb-2">{step.step}</div>
+                    <h4 className="font-black text-sm mb-2">{step.title}</h4>
+                    <p className="text-gray-400 text-xs leading-relaxed">{step.desc}</p>
+                  </div>
+                  {i < 3 && (
+                    <div className="absolute top-1/2 -right-3 transform -translate-y-1/2 text-orange-400 text-lg z-10 font-black">▶</div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-end pr-6 mb-3">
+              <span className="text-orange-400 text-xl font-black">▼</span>
+            </div>
+            <div className="grid grid-cols-4 gap-4">
+              {[...carWorkflow.slice(4)].reverse().map((step, i, arr) => (
+                <div key={step.step} className="relative">
+                  <div className="bg-gray-800 hover:bg-gray-700 transition rounded-2xl p-6 text-center h-full">
+                    <div className="text-4xl mb-3">{step.icon}</div>
+                    <div className="w-7 h-7 bg-orange-500 text-white text-xs font-black rounded-full flex items-center justify-center mx-auto mb-2">{step.step}</div>
+                    <h4 className="font-black text-sm mb-2">{step.title}</h4>
+                    <p className="text-gray-400 text-xs leading-relaxed">{step.desc}</p>
+                  </div>
+                  {i < arr.length - 1 && (
+                    <div className="absolute top-1/2 -right-3 transform -translate-y-1/2 text-orange-400 text-lg z-10 font-black">◀</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile vertical */}
+          <div className="md:hidden space-y-3">
+            {carWorkflow.map((step) => (
+              <div key={step.step} className="flex items-start gap-4 bg-gray-800 p-5 rounded-2xl">
+                <div className="flex-shrink-0 w-9 h-9 bg-orange-500 text-white text-sm font-black rounded-full flex items-center justify-center">
+                  {step.step}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xl">{step.icon}</span>
+                    <h4 className="font-black text-sm">{step.title}</h4>
+                  </div>
+                  <p className="text-gray-400 text-xs leading-relaxed">{step.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <button onClick={() => go("contact")}
+              className="px-10 py-4 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-2xl transition text-lg">
+              Start Your Inquiry →
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// ─── ELECTRONICS TAB ──────────────────────────────────────────────────────────
+function ElectronicsTab({ go }) {
+  return (
+    <div>
+      <section className="bg-gradient-to-r from-purple-950 to-purple-700 text-white py-16 px-6">
+        <div className="max-w-7xl mx-auto">
+          <Chip label="Local · Export · Wholesale" />
+          <h1 className="text-4xl font-black mb-2">RS Electronics</h1>
+          <p className="text-purple-200 text-lg">Quality electronics from Japan — for local use and export worldwide</p>
+        </div>
+      </section>
+
+      <section className="py-20 px-6 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader title="Product Categories" subtitle="New, pre-owned, and refurbished electronics — sourced from Japan" />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            {electronicsCategories.map((cat, i) => (
+              <div key={i} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition text-center">
+                <div className="text-5xl mb-4">{cat.icon}</div>
+                <h3 className="text-lg font-black mb-2">{cat.title}</h3>
+                <p className="text-gray-500 text-sm mb-4 leading-relaxed">{cat.desc}</p>
+                <span className="text-xs text-purple-700 font-bold bg-purple-50 px-3 py-1.5 rounded-full">{cat.brands}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-gradient-to-br from-purple-950 to-purple-800 text-white rounded-2xl p-12 text-center">
+            <div className="text-6xl mb-5">🛒</div>
+            <h3 className="text-2xl font-black mb-3">Full Online Catalog — Coming Soon</h3>
+            <p className="text-purple-200 mb-8 max-w-xl mx-auto">
+              E-commerce store with photos, full specs, and live pricing is launching soon. For now, contact us directly for availability and quotes.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <WaBtn />
+              <button onClick={() => go("contact")}
+                className="px-6 py-3 bg-white text-purple-900 font-bold rounded-xl hover:bg-gray-100 transition">
+                Send Inquiry Form
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// ─── TOURS TAB ────────────────────────────────────────────────────────────────
+function ToursTab({ go }) {
+  return (
+    <div>
+      <section className="bg-gradient-to-r from-emerald-950 to-emerald-700 text-white py-16 px-6">
+        <div className="max-w-7xl mx-auto">
+          <Chip label="Japan Travel · Consultancy" />
+          <h1 className="text-4xl font-black mb-2">RS Tours</h1>
+          <p className="text-emerald-200 text-lg">Experience Japan your way — guided by people who know it best</p>
+        </div>
+      </section>
+
+      <section className="py-20 px-6 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader title="Tour Consultancy Services" subtitle="We plan, you explore — stress-free travel across all of Japan" />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {tourServices.map((s, i) => (
+              <div key={i} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
+                <div className="text-4xl mb-4">{s.icon}</div>
+                <h3 className="text-lg font-black mb-2">{s.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Transport note */}
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 mb-12">
+            <h4 className="font-black text-amber-900 mb-2 flex items-center gap-2">
+              <span>🚐</span> Transportation Service — Coming Soon
+            </h4>
+            <p className="text-amber-700 text-sm leading-relaxed">
+              We are in the process of obtaining required certifications and green number plate registration for licensed passenger transport in Japan. This service will be available soon. Currently we provide full tour consultancy, planning, and coordination services.
+            </p>
+          </div>
+
+          {/* CTA */}
+          <div className="bg-gradient-to-br from-emerald-950 to-emerald-800 text-white rounded-2xl p-12 text-center">
+            <div className="text-6xl mb-5">🗾</div>
+            <h3 className="text-2xl font-black mb-3">Plan Your Japan Trip Today</h3>
+            <p className="text-emerald-200 mb-8 max-w-xl mx-auto">
+              Share your travel dates, group size, interests, and budget — we'll craft the perfect Japan itinerary just for you.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <WaBtn />
+              <button onClick={() => go("contact")}
+                className="px-6 py-3 bg-white text-emerald-900 font-bold rounded-xl hover:bg-gray-100 transition">
+                Send Inquiry Form
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// ─── CONTACT TAB ──────────────────────────────────────────────────────────────
+function ContactTab() {
+  const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
+  const [sent, setSent] = useState(false);
+
+  const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Thank you for your interest! We'll contact you soon about ${formData.service}`);
-    setActiveTab('home');
+    setSent(true);
   };
 
-  // Home Tab
-  const HomeTab = () => {
-    return React.createElement("div", null,
-      // Hero Section
-      React.createElement("section", { className: "bg-gradient-to-r from-orange-500 to-orange-600 text-white py-20 px-6" },
-        React.createElement("div", { className: "max-w-7xl mx-auto text-center" },
-          React.createElement("h1", { className: "text-5xl md:text-6xl font-bold mb-6" }, "Rising Sun Services"),
-          React.createElement("p", { className: "text-2xl mb-8 max-w-3xl mx-auto" },
-            "Your trusted partner for innovative IT solutions and robotics education"
-          ),
-          React.createElement("div", { className: "flex flex-wrap justify-center gap-4" },
-            React.createElement("button", { 
-              onClick: () => setActiveTab('services'),
-              className: "px-8 py-4 bg-white text-orange-600 rounded-lg font-bold hover:bg-gray-100 transition transform hover:scale-105"
-            }, "Explore IT Services"),
-            React.createElement("button", { 
-              onClick: () => setActiveTab('robotics'),
-              className: "px-8 py-4 bg-orange-700 text-white rounded-lg font-bold hover:bg-orange-800 transition transform hover:scale-105"
-            }, "Robotics for Kids")
-          )
-        )
-      ),
+  const inputCls = "w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition bg-gray-50 focus:bg-white";
 
-      // Quick Stats
-      React.createElement("section", { className: "bg-gray-900 text-white py-12" },
-        React.createElement("div", { className: "max-w-7xl mx-auto px-6" },
-          React.createElement("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-8 text-center" },
-            [
-              ["50+", "Projects"],
-              ["15+", "Clients"],
-              ["5+", "Years"],
-              ["100+", "Students"]
-            ].map(([num, label]) => 
-              React.createElement("div", { key: label },
-                React.createElement("div", { className: "text-3xl font-bold text-orange-400" }, num),
-                React.createElement("div", { className: "text-sm text-gray-400" }, label)
-              )
-            )
-          )
-        )
-      ),
+  return (
+    <section className="py-20 px-6 bg-gray-50">
+      <div className="max-w-5xl mx-auto">
+        <SectionHeader title="Contact Us" subtitle="We respond within 24 hours — or reach us instantly on WhatsApp" />
 
-      // Featured IT Services
-      React.createElement("section", { className: "py-20 px-6 max-w-7xl mx-auto" },
-        React.createElement(SectionHeader, {
-          title: "Our IT Solutions",
-          subtitle: "Professional development services with transparent pricing"
-        }),
-        React.createElement("div", { className: "grid md:grid-cols-2 lg:grid-cols-4 gap-8" },
-          itServices.map((service, index) => 
-            React.createElement(Card, {
-              key: index,
-              icon: service.icon,
-              title: service.title,
-              price: service.price,
-              description: service.description,
-              features: service.features.slice(0, 3),
-              highlight: service.highlight,
-              onClick: () => handleInquiry(service.title)
-            })
-          )
-        ),
-        React.createElement("div", { className: "text-center mt-12" },
-          React.createElement("button", {
-            onClick: () => setActiveTab('services'),
-            className: "px-8 py-3 bg-gray-900 text-white rounded-lg font-bold hover:bg-gray-800 transition inline-flex items-center gap-2"
-          }, "View All Services", React.createElement(ArrowRightIcon, null))
-        )
-      ),
+        <div className="grid md:grid-cols-3 gap-8">
+          {/* Side panel */}
+          <div className="space-y-5">
+            <div className="bg-white rounded-2xl p-6 shadow-md">
+              <h4 className="font-black text-gray-800 mb-5">Connect With Us</h4>
+              <div className="space-y-5">
+                <a href={WA_LINK} target="_blank" rel="noopener noreferrer"
+                  className="flex items-start gap-3 text-green-600 hover:text-green-700 transition group">
+                  <span className="text-2xl mt-0.5">📱</span>
+                  <div>
+                    <div className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-0.5">WhatsApp</div>
+                    <div className="font-bold group-hover:underline">{PHONE}</div>
+                  </div>
+                </a>
+                <a href={`mailto:${EMAIL}`}
+                  className="flex items-start gap-3 text-orange-600 hover:text-orange-700 transition group">
+                  <span className="text-2xl mt-0.5">✉</span>
+                  <div>
+                    <div className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-0.5">Email</div>
+                    <div className="font-bold text-sm group-hover:underline break-all">{EMAIL}</div>
+                  </div>
+                </a>
+                <div className="flex items-start gap-3 text-gray-500">
+                  <span className="text-2xl mt-0.5">📍</span>
+                  <div>
+                    <div className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-0.5">Location</div>
+                    <div className="font-bold">Tokyo, Japan</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      // Robotics Promo
-      React.createElement("section", { className: "py-16 bg-orange-50" },
-        React.createElement("div", { className: "max-w-7xl mx-auto px-6" },
-          React.createElement("div", { className: "flex flex-col md:flex-row items-center gap-12" },
-            React.createElement("div", { className: "flex-1" },
-              React.createElement("div", { className: "w-24 h-24 bg-orange-600 text-white rounded-full flex items-center justify-center mb-6" },
-                React.createElement(RobotIcon, null)
-              ),
-              React.createElement("h3", { className: "text-3xl font-bold mb-4" }, "Robotics for Kids"),
-              React.createElement("p", { className: "text-lg text-gray-600 mb-6" },
-                "Introduce your child to the exciting world of robotics and programming. Our hands-on courses teach STEM skills through fun projects."
-              ),
-              React.createElement("button", {
-                onClick: () => setActiveTab('robotics'),
-                className: "px-6 py-3 bg-orange-600 text-white rounded-lg font-bold hover:bg-orange-700 transition inline-flex items-center gap-2"
-              }, "Learn More", React.createElement(ArrowRightIcon, null))
-            ),
-            React.createElement("div", { className: "flex-1 grid grid-cols-2 gap-4" },
-              ["🤖 Build Robots", "💻 Learn Coding", "🔧 Hands-on Projects", "🏆 Competitions"].map(item =>
-                React.createElement("div", { key: item, className: "bg-white p-4 rounded-lg shadow text-center font-bold" }, item)
-              )
-            )
-          )
-        )
-      ),
+            <div className="bg-white rounded-2xl p-6 shadow-md text-center">
+              <p className="text-sm font-bold text-gray-600 mb-4">Scan to open WhatsApp</p>
+              <img src={QR_URL} alt="WhatsApp QR Code" className="w-36 h-36 mx-auto rounded-xl" />
+              <p className="text-xs text-gray-400 mt-3">{PHONE}</p>
+            </div>
 
-      // Parent Company Link
-      React.createElement("section", { className: "py-12 bg-gray-100" },
-        React.createElement("div", { className: "max-w-4xl mx-auto px-6 text-center" },
-          React.createElement("p", { className: "text-gray-600 mb-4" }, "Part of"),
-          React.createElement("a", { 
-            href: "https://asdiqa.jp", 
-            target: "_blank",
-            className: "text-2xl font-bold text-gray-900 hover:text-orange-600 transition inline-flex items-center gap-2"
-          }, "ASDIQA CO. LTD.", React.createElement(ExternalLinkIcon, null))
-        )
-      )
-    );
+            <div className="bg-white rounded-2xl p-5 shadow-md text-center text-sm text-gray-500">
+              A brand of{" "}
+              <a href="https://asdiqa.jp" target="_blank" rel="noopener noreferrer"
+                className="text-orange-600 font-bold hover:text-orange-700">
+                Asdiqa Co. Ltd.
+              </a>
+              <br />
+              <span className="text-gray-400">Registered in Japan</span>
+            </div>
+          </div>
+
+          {/* Form */}
+          <div className="md:col-span-2 bg-white rounded-2xl shadow-md p-8">
+            {sent ? (
+              <div className="text-center py-16">
+                <div className="text-7xl mb-5">✅</div>
+                <h3 className="text-2xl font-black mb-2">Message Sent!</h3>
+                <p className="text-gray-500 mb-8">We'll get back to you within 24 hours. For faster response, use WhatsApp.</p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <button onClick={() => setSent(false)}
+                    className="px-6 py-3 bg-orange-500 text-white font-bold rounded-xl hover:bg-orange-600 transition">
+                    Send Another
+                  </button>
+                  <WaBtn />
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-sm font-bold mb-2 text-gray-700">Full Name *</label>
+                    <input type="text" value={form.name} onChange={set("name")} required className={inputCls} placeholder="Your name" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold mb-2 text-gray-700">Email *</label>
+                    <input type="email" value={form.email} onChange={set("email")} required className={inputCls} placeholder="your@email.com" />
+                  </div>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-sm font-bold mb-2 text-gray-700">Phone / WhatsApp</label>
+                    <input type="tel" value={form.phone} onChange={set("phone")} className={inputCls} placeholder="+81 or +880..." />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold mb-2 text-gray-700">Subject *</label>
+                    <select value={form.subject} onChange={set("subject")} required className={inputCls}>
+                      <option value="">Select a division...</option>
+                      <option>RS Tech Lab — IT Development</option>
+                      <option>RS Tech Lab — Robotics Course</option>
+                      <option>RS Cars — Vehicle Inquiry</option>
+                      <option>RS Electronics — Product Inquiry</option>
+                      <option>RS Tours — Travel Planning</option>
+                      <option>General Inquiry</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold mb-2 text-gray-700">Message *</label>
+                  <textarea value={form.message} onChange={set("message")} required rows={6} className={inputCls}
+                    placeholder="Tell us your requirements, timeline, and any other details..." />
+                </div>
+                <button type="submit"
+                  className="w-full py-4 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-xl transition text-lg">
+                  Send Message →
+                </button>
+                <p className="text-xs text-center text-gray-400">
+                  Or reach us instantly on{" "}
+                  <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="text-green-600 font-bold hover:underline">WhatsApp</a>
+                </p>
+              </form>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── APP ROOT ─────────────────────────────────────────────────────────────────
+function App() {
+  const [active, setActive] = useState("home");
+
+  const go = (tab) => {
+    setActive(tab);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Services Tab
-  const ServicesTab = () => {
-    return React.createElement("section", { className: "py-20 px-6 max-w-7xl mx-auto" },
-      React.createElement(SectionHeader, {
-        title: "IT Development Services",
-        subtitle: "Custom solutions with transparent pricing and quality assurance"
-      }),
-      React.createElement("div", { className: "grid md:grid-cols-2 gap-8" },
-        itServices.map((service, index) => 
-          React.createElement(Card, {
-            key: index,
-            icon: service.icon,
-            title: service.title,
-            price: service.price,
-            description: service.description,
-            features: service.features,
-            highlight: service.highlight,
-            onClick: () => handleInquiry(service.title)
-          })
-        )
-      ),
-      React.createElement("div", { className: "mt-12 p-6 bg-blue-50 rounded-lg" },
-        React.createElement("p", { className: "text-sm text-blue-800" },
-          React.createElement("span", { className: "font-bold" }, "Note: "),
-          "All prices are starting estimates. Final quote depends on specific requirements and project scope. Free consultation available."
-        )
-      )
-    );
-  };
-
-  // Robotics Tab
-  const RoboticsTab = () => {
-    return React.createElement("section", { className: "py-20 px-6 max-w-7xl mx-auto" },
-      React.createElement(SectionHeader, {
-        title: "Robotics & Embedded Systems Course",
-        subtitle: "Nurturing future innovators through hands-on STEM education"
-      }),
-      
-      React.createElement("div", { className: "bg-gradient-to-r from-orange-500 to-orange-600 text-white p-12 rounded-2xl mb-12" },
-        React.createElement("div", { className: "flex items-center gap-4 mb-6" },
-          React.createElement(RobotIcon, null),
-          React.createElement("h3", { className: "text-3xl font-bold" }, "For School Children (Ages 7-15)")
-        ),
-        React.createElement("p", { className: "text-xl mb-8 max-w-3xl" },
-          "Our comprehensive robotics program teaches children programming, electronics, and problem-solving through fun, engaging projects."
-        ),
-        React.createElement("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-4" },
-          ["No Experience Needed", "All Materials Provided", "Small Classes", "Certificates"].map(item =>
-            React.createElement("div", { key: item, className: "bg-white/20 p-3 rounded-lg text-center font-bold" }, item)
-          )
-        )
-      ),
-
-      React.createElement("div", { className: "grid md:grid-cols-3 gap-8 mb-12" },
-        roboticsCourses.map((course, index) =>
-          React.createElement("div", { key: index, className: "bg-white rounded-xl shadow-lg overflow-hidden" },
-            React.createElement("div", { className: "bg-gray-900 text-white p-6" },
-              React.createElement("h4", { className: "text-xl font-bold mb-2" }, course.level),
-              React.createElement("div", { className: "text-orange-400 font-bold" }, course.price),
-              React.createElement("div", { className: "text-sm text-gray-400 mt-1" }, course.duration)
-            ),
-            React.createElement("div", { className: "p-6" },
-              React.createElement("ul", { className: "space-y-2" },
-                course.topics.map((topic, i) =>
-                  React.createElement("li", { key: i, className: "text-sm text-gray-600 flex items-center gap-2" },
-                    React.createElement("span", { className: "w-1 h-1 bg-orange-500 rounded-full" }),
-                    topic
-                  )
-                )
-              ),
-              React.createElement("button", {
-                onClick: () => handleInquiry(`Robotics: ${course.level}`),
-                className: "mt-6 w-full py-2 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600 transition"
-              }, "Enroll Now")
-            )
-          )
-        )
-      ),
-
-      React.createElement("div", { className: "bg-gray-50 p-8 rounded-2xl" },
-        React.createElement("h4", { className: "text-2xl font-bold mb-6 text-center" }, "Course Schedule"),
-        React.createElement("div", { className: "grid md:grid-cols-2 gap-8" },
-          React.createElement("div", null,
-            React.createElement("h5", { className: "font-bold mb-2" }, "Weekend Classes:"),
-            React.createElement("p", { className: "text-gray-600" }, "Saturdays 10:00-12:00 / 13:00-15:00")
-          ),
-          React.createElement("div", null,
-            React.createElement("h5", { className: "font-bold mb-2" }, "Weekday Classes:"),
-            React.createElement("p", { className: "text-gray-600" }, "Wednesdays & Fridays 16:00-18:00")
-          )
-        )
-      )
-    );
-  };
-
-  // Portfolio Tab
-  const PortfolioTab = () => {
-    return React.createElement("section", { className: "py-20 px-6 max-w-7xl mx-auto" },
-      React.createElement(SectionHeader, {
-        title: "Our Portfolio",
-        subtitle: "Real projects we've delivered for our clients"
-      }),
-      React.createElement("div", { className: "grid md:grid-cols-3 gap-8" },
-        projects.map(project =>
-          React.createElement("div", { key: project.id, className: "bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition" },
-            React.createElement("div", { className: "h-48 bg-gray-200" },
-              React.createElement("img", { src: project.image, className: "w-full h-full object-cover" })
-            ),
-            React.createElement("div", { className: "p-6" },
-              React.createElement("span", { className: "text-sm text-orange-600 font-bold" }, project.category),
-              React.createElement("h3", { className: "text-xl font-bold mb-2" }, project.title),
-              React.createElement("p", { className: "text-gray-600 text-sm mb-4" }, project.description),
-              React.createElement("a", { 
-                href: project.link, 
-                target: "_blank",
-                className: "text-orange-600 font-bold flex items-center gap-2 hover:gap-3 transition"
-              }, "View Project", React.createElement(ArrowRightIcon, null))
-            )
-          )
-        )
-      )
-    );
-  };
-
-  // Contact Tab
-  const ContactTab = () => {
-    return React.createElement("section", { className: "py-20 px-6 max-w-4xl mx-auto" },
-      React.createElement("div", { className: "bg-white rounded-2xl shadow-xl p-12" },
-        React.createElement(SectionHeader, {
-          title: "Contact Us",
-          subtitle: "Get in touch for a free consultation"
-        }),
-        React.createElement("form", { onSubmit: handleSubmit },
-          React.createElement("div", { className: "grid md:grid-cols-2 gap-6 mb-6" },
-            React.createElement("div", null,
-              React.createElement("label", { className: "block text-sm font-bold mb-2" }, "Name"),
-              React.createElement("input", {
-                type: "text",
-                className: "w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500",
-                value: formData.name,
-                onChange: (e) => setFormData({...formData, name: e.target.value}),
-                required: true
-              })
-            ),
-            React.createElement("div", null,
-              React.createElement("label", { className: "block text-sm font-bold mb-2" }, "Email"),
-              React.createElement("input", {
-                type: "email",
-                className: "w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500",
-                value: formData.email,
-                onChange: (e) => setFormData({...formData, email: e.target.value}),
-                required: true
-              })
-            )
-          ),
-          React.createElement("div", { className: "mb-6" },
-            React.createElement("label", { className: "block text-sm font-bold mb-2" }, "Phone"),
-            React.createElement("input", {
-              type: "tel",
-              className: "w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500",
-              value: formData.phone,
-              onChange: (e) => setFormData({...formData, phone: e.target.value}),
-              required: true
-            })
-          ),
-          React.createElement("div", { className: "mb-6" },
-            React.createElement("label", { className: "block text-sm font-bold mb-2" }, "Service Interested In"),
-            React.createElement("select", {
-              className: "w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500",
-              value: formData.service,
-              onChange: (e) => setFormData({...formData, service: e.target.value}),
-              required: true
-            },
-              React.createElement("option", { value: "" }, "Select a service"),
-              itServices.map(s => React.createElement("option", { key: s.title, value: s.title }, s.title)),
-              roboticsCourses.map(c => React.createElement("option", { key: c.level, value: c.level }, `Robotics: ${c.level}`))
-            )
-          ),
-          React.createElement("div", { className: "mb-6" },
-            React.createElement("label", { className: "block text-sm font-bold mb-2" }, "Message"),
-            React.createElement("textarea", {
-              className: "w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 h-32",
-              value: formData.message,
-              onChange: (e) => setFormData({...formData, message: e.target.value}),
-              placeholder: "Tell us about your project..."
-            })
-          ),
-          React.createElement("button", {
-            type: "submit",
-            className: "w-full py-4 bg-orange-600 text-white rounded-lg font-bold hover:bg-orange-700 transition"
-          }, "Send Inquiry")
-        )
-      )
-    );
-  };
-
-  // Inquiry Form Tab
-  const InquiryTab = () => {
-    return React.createElement("section", { className: "py-20 px-6 max-w-4xl mx-auto" },
-      React.createElement("button", {
-        onClick: () => setActiveTab('services'),
-        className: "text-gray-600 hover:text-orange-600 mb-8 font-bold flex items-center gap-2"
-      }, "← Back to Services"),
-      React.createElement("div", { className: "bg-white rounded-2xl shadow-xl p-12" },
-        React.createElement(SectionHeader, {
-          title: "Service Inquiry",
-          subtitle: `You're interested in: ${selectedService}`
-        }),
-        React.createElement("form", { onSubmit: handleSubmit },
-          React.createElement("div", { className: "grid md:grid-cols-2 gap-6 mb-6" },
-            React.createElement("div", null,
-              React.createElement("label", { className: "block text-sm font-bold mb-2" }, "Name"),
-              React.createElement("input", {
-                type: "text",
-                className: "w-full p-3 border rounded-lg",
-                required: true
-              })
-            ),
-            React.createElement("div", null,
-              React.createElement("label", { className: "block text-sm font-bold mb-2" }, "Email"),
-              React.createElement("input", {
-                type: "email",
-                className: "w-full p-3 border rounded-lg",
-                required: true
-              })
-            )
-          ),
-          React.createElement("div", { className: "mb-6" },
-            React.createElement("label", { className: "block text-sm font-bold mb-2" }, "Phone"),
-            React.createElement("input", {
-              type: "tel",
-              className: "w-full p-3 border rounded-lg",
-              required: true
-            })
-          ),
-          React.createElement("div", { className: "mb-6" },
-            React.createElement("label", { className: "block text-sm font-bold mb-2" }, "Company/Organization"),
-            React.createElement("input", {
-              type: "text",
-              className: "w-full p-3 border rounded-lg"
-            })
-          ),
-          React.createElement("div", { className: "mb-6" },
-            React.createElement("label", { className: "block text-sm font-bold mb-2" }, "Project Details"),
-            React.createElement("textarea", {
-              className: "w-full p-3 border rounded-lg h-32",
-              placeholder: "Please describe your requirements, timeline, and budget...",
-              required: true
-            })
-          ),
-          React.createElement("button", {
-            type: "submit",
-            className: "w-full py-4 bg-orange-600 text-white rounded-lg font-bold hover:bg-orange-700 transition"
-          }, "Submit Inquiry")
-        )
-      )
-    );
-  };
-
-  // Footer
-  const Footer = () => {
-    return React.createElement("footer", { className: "bg-gray-900 text-gray-400 py-12" },
-      React.createElement("div", { className: "max-w-7xl mx-auto px-6" },
-        React.createElement("div", { className: "grid md:grid-cols-4 gap-8" },
-          React.createElement("div", null,
-            React.createElement("img", { src: "./assets/rslogo.png", className: "h-10 w-auto mb-4 brightness-0 invert" }),
-            React.createElement("p", { className: "text-sm" }, "Innovative IT solutions and robotics education")
-          ),
-          React.createElement("div", null,
-            React.createElement("h4", { className: "font-bold text-white mb-4" }, "Services"),
-            React.createElement("ul", { className: "space-y-2 text-sm" },
-              itServices.map(s => React.createElement("li", { key: s.title }, s.title))
-            )
-          ),
-          React.createElement("div", null,
-            React.createElement("h4", { className: "font-bold text-white mb-4" }, "Quick Links"),
-            React.createElement("ul", { className: "space-y-2 text-sm" },
-              ["About", "Portfolio", "Contact"].map(item => 
-                React.createElement("li", { key: item, className: "cursor-pointer hover:text-white" }, item)
-              )
-            )
-          ),
-          React.createElement("div", null,
-            React.createElement("h4", { className: "font-bold text-white mb-4" }, "Contact"),
-            React.createElement("p", { className: "text-sm" }, "Tokyo, Japan"),
-            React.createElement("p", { className: "text-sm" }, "info@risingsunservices.jp"),
-            React.createElement("p", { className: "text-sm mt-4" }, "A brand of ",
-              React.createElement("a", { href: "https://asdiqa.jp", target: "_blank", className: "text-orange-400 hover:text-orange-300" }, "Asdiqa Co. Ltd.")
-            )
-          )
-        ),
-        React.createElement("div", { className: "border-t border-gray-800 mt-8 pt-8 text-center text-sm" },
-          "© 2026 Rising Sun Services — All rights reserved"
-        )
-      )
-    );
-  };
-
-  // Main Render
-  return React.createElement("div", { className: "min-h-screen bg-gray-50 font-sans" },
-    React.createElement(Nav, null),
-    React.createElement("main", null,
-      activeTab === 'home' && React.createElement(HomeTab, null),
-      activeTab === 'services' && React.createElement(ServicesTab, null),
-      activeTab === 'robotics' && React.createElement(RoboticsTab, null),
-      activeTab === 'portfolio' && React.createElement(PortfolioTab, null),
-      activeTab === 'contact' && React.createElement(ContactTab, null),
-      activeTab === 'inquiry' && React.createElement(InquiryTab, null)
-    ),
-    React.createElement(Footer, null)
+  return (
+    <div className="min-h-screen bg-gray-50 font-sans">
+      <ContactBar />
+      <Nav active={active} go={go} />
+      <main>
+        {active === "home"        && <HomeTab        go={go} />}
+        {active === "techlab"     && <TechLabTab     go={go} />}
+        {active === "cars"        && <CarsTab        go={go} />}
+        {active === "electronics" && <ElectronicsTab go={go} />}
+        {active === "tours"       && <ToursTab       go={go} />}
+        {active === "contact"     && <ContactTab />}
+      </main>
+      <Footer go={go} />
+    </div>
   );
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(React.createElement(App, null));
+root.render(<App />);
