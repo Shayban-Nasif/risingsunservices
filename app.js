@@ -20,10 +20,10 @@ const carWorkflow = [
 ];
 
 const showcaseCars = [
-  { make: "Toyota", model: "Alphard", year: "2022", price: "¥4,500,000~", km: "22,000 km", color: "Pearl White", fuel: "Hybrid", img: "https://via.placeholder.com/480x300/1e293b/94a3b8?text=Toyota+Alphard+2022" },
-  { make: "Toyota", model: "Land Cruiser", year: "2021", price: "¥7,200,000~", km: "35,000 km", color: "Black", fuel: "Diesel", img: "https://via.placeholder.com/480x300/0f172a/94a3b8?text=Toyota+Land+Cruiser+2021" },
-  { make: "Toyota", model: "Hiace Van", year: "2020", price: "¥2,800,000~", km: "48,000 km", color: "Silver", fuel: "Diesel", img: "https://via.placeholder.com/480x300/1e293b/94a3b8?text=Toyota+Hiace+2020" },
-  { make: "Honda",  model: "Freed",    year: "2023", price: "¥1,900,000~", km: "12,000 km", color: "Blue", fuel: "Hybrid", img: "https://via.placeholder.com/480x300/0f172a/94a3b8?text=Honda+Freed+2023" },
+  { make: "Toyota", model: "Alphard", year: "2022", price: "¥4,500,000~", km: "22,000 km", color: "Pearl White", fuel: "Hybrid", img: "./assets/cars/alphard.jpg" },
+  { make: "Toyota", model: "Land Cruiser", year: "2021", price: "¥7,200,000~", km: "35,000 km", color: "Black", fuel: "Diesel", img: "./assets/cars/landcruiser.jpg" },
+  { make: "Toyota", model: "Hiace Van", year: "2020", price: "¥2,800,000~", km: "48,000 km", color: "Silver", fuel: "Diesel", img: "./assets/cars/hiace.jpg" },
+  { make: "Honda",  model: "Freed",    year: "2023", price: "¥1,900,000~", km: "12,000 km", color: "Blue", fuel: "Hybrid", img: "./assets/cars/freed.jpg" },
 ];
 
 const electronicsCategories = [
@@ -466,11 +466,13 @@ function TechLabTab({ go }) {
 function CarsTab({ go }) {
   return (
     <div>
-      <section className="bg-gradient-to-r from-red-950 to-red-800 text-white py-16 px-6">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative text-white py-24 px-6 overflow-hidden"
+        style={{ backgroundImage: "url(./assets/cars/landcruiser.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
+        <div className="absolute inset-0 bg-red-950/80"></div>
+        <div className="relative max-w-7xl mx-auto">
           <Chip label="Japan · Bangladesh · Export" />
-          <h1 className="text-4xl font-black mb-2">RS Cars</h1>
-          <p className="text-red-200 text-lg">Quality Japanese vehicles — sourced from auctions, delivered to your door</p>
+          <h1 className="text-5xl font-black mb-3">RS Cars</h1>
+          <p className="text-red-100 text-xl">Quality Japanese vehicles — sourced from auctions, delivered to your door</p>
         </div>
       </section>
 
@@ -593,11 +595,13 @@ function CarsTab({ go }) {
 function ElectronicsTab({ go }) {
   return (
     <div>
-      <section className="bg-gradient-to-r from-purple-950 to-purple-700 text-white py-16 px-6">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative text-white py-24 px-6 overflow-hidden"
+        style={{ backgroundImage: "url(./assets/images/electronics-hero.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
+        <div className="absolute inset-0 bg-purple-950/85"></div>
+        <div className="relative max-w-7xl mx-auto">
           <Chip label="Local · Export · Wholesale" />
-          <h1 className="text-4xl font-black mb-2">RS Electronics</h1>
-          <p className="text-purple-200 text-lg">Quality electronics from Japan — for local use and export worldwide</p>
+          <h1 className="text-5xl font-black mb-3">RS Electronics</h1>
+          <p className="text-purple-200 text-xl">Quality electronics from Japan — for local use and export worldwide</p>
         </div>
       </section>
 
@@ -639,11 +643,13 @@ function ElectronicsTab({ go }) {
 function ToursTab({ go }) {
   return (
     <div>
-      <section className="bg-gradient-to-r from-emerald-950 to-emerald-700 text-white py-16 px-6">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative text-white py-24 px-6 overflow-hidden"
+        style={{ backgroundImage: "url(./assets/images/japan-hero.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
+        <div className="absolute inset-0 bg-emerald-950/80"></div>
+        <div className="relative max-w-7xl mx-auto">
           <Chip label="Japan Travel · Consultancy" />
-          <h1 className="text-4xl font-black mb-2">RS Tours</h1>
-          <p className="text-emerald-200 text-lg">Experience Japan your way — guided by people who know it best</p>
+          <h1 className="text-5xl font-black mb-3">RS Tours</h1>
+          <p className="text-emerald-100 text-xl">Experience Japan your way — guided by people who know it best</p>
         </div>
       </section>
 
