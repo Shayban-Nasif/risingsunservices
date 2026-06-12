@@ -355,9 +355,9 @@ function TechLabTab({ go }) {
   return (
     <div>
       <section className="bg-gradient-to-r from-blue-950 to-blue-700 text-white py-16 px-6">
-        <div className="max-w-7xl mx-auto flex items-center gap-6">
-          <div className="bg-white rounded-2xl p-3 hidden md:block shadow-md flex-shrink-0">
-            <img src="./assets/logos/RSTechLab-Logo.png" alt="RS Tech Lab" className="h-16 w-auto object-contain" />
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="bg-white rounded-2xl p-4 shadow-lg flex-shrink-0">
+            <img src="./assets/logos/RSTechLab-Logo.png" alt="RS Tech Lab" className="h-28 w-auto object-contain" />
           </div>
           <div>
             <Chip label="IT · Education" />
@@ -473,9 +473,9 @@ function CarsTab({ go }) {
       <section className="relative text-white py-24 px-6 overflow-hidden"
         style={{ backgroundImage: "url(./assets/cars/landcruiser.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="absolute inset-0 bg-red-950/80"></div>
-        <div className="relative max-w-7xl mx-auto flex items-center gap-8">
-          <div className="bg-white rounded-2xl p-3 hidden md:block shadow-md flex-shrink-0">
-            <img src="./assets/logos/RSCars-Logo.png" alt="RS Cars" className="h-16 w-auto object-contain" />
+        <div className="relative max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="bg-white rounded-2xl p-4 shadow-lg flex-shrink-0">
+            <img src="./assets/logos/RSCars-Logo.png" alt="RS Cars" className="h-28 w-auto object-contain" />
           </div>
           <div>
             <Chip label="Japan · Bangladesh · Export" />
@@ -607,9 +607,9 @@ function ElectronicsTab({ go }) {
       <section className="relative text-white py-24 px-6 overflow-hidden"
         style={{ backgroundImage: "url(./assets/images/electronics-hero.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="absolute inset-0 bg-purple-950/85"></div>
-        <div className="relative max-w-7xl mx-auto flex items-center gap-8">
-          <div className="bg-white rounded-2xl p-3 hidden md:block shadow-md flex-shrink-0">
-            <img src="./assets/logos/RSElectronics-Logo.png" alt="RS Electronics" className="h-16 w-auto object-contain" />
+        <div className="relative max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="bg-white rounded-2xl p-4 shadow-lg flex-shrink-0">
+            <img src="./assets/logos/RSElectronics-Logo.png" alt="RS Electronics" className="h-28 w-auto object-contain" />
           </div>
           <div>
             <Chip label="Local · Export · Wholesale" />
@@ -660,9 +660,9 @@ function ToursTab({ go }) {
       <section className="relative text-white py-24 px-6 overflow-hidden"
         style={{ backgroundImage: "url(./assets/images/japan-hero.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="absolute inset-0 bg-emerald-950/80"></div>
-        <div className="relative max-w-7xl mx-auto flex items-center gap-8">
-          <div className="bg-white rounded-2xl p-3 hidden md:block shadow-md flex-shrink-0">
-            <img src="./assets/logos/RSTours-Logo.png" alt="RS Tours" className="h-16 w-auto object-contain" />
+        <div className="relative max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center gap-6">
+          <div className="bg-white rounded-2xl p-4 shadow-lg flex-shrink-0">
+            <img src="./assets/logos/RSTours-Logo.png" alt="RS Tours" className="h-28 w-auto object-contain" />
           </div>
           <div>
             <Chip label="Japan Travel · Consultancy" />
