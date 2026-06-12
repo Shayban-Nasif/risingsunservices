@@ -137,7 +137,7 @@ function Nav({ active, go }) {
     <nav className="bg-white border-b sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <button onClick={() => navigate("home")} className="focus:outline-none">
-          <img src="./assets/rslogo.png" alt="Rising Sun Services" className="h-11 w-auto object-contain" />
+          <img src="./assets/logos/RS-Logo.png" alt="Rising Sun Services" className="h-11 w-auto object-contain" />
         </button>
 
         {/* Desktop */}
@@ -186,7 +186,7 @@ function Footer({ go }) {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-5 gap-10 mb-10">
           <div className="md:col-span-2">
-            <img src="./assets/rslogo.png" alt="Rising Sun Services" className="h-10 w-auto mb-4 brightness-0 invert" />
+            <img src="./assets/logos/RS-Logo.png" alt="Rising Sun Services" className="h-10 w-auto mb-4 brightness-0 invert" />
             <p className="text-sm mb-4 leading-relaxed">
               Multi-domain business bridging Japan and the world — IT development, automotive, electronics, and tourism, all under one trusted brand.
             </p>
@@ -354,7 +354,7 @@ function TechLabTab({ go }) {
     <div>
       <section className="bg-gradient-to-r from-blue-950 to-blue-700 text-white py-16 px-6">
         <div className="max-w-7xl mx-auto flex items-center gap-6">
-          <img src="./assets/rstechlablogo.png" alt="RS Tech Lab" className="h-16 w-auto object-contain hidden md:block" />
+          <img src="./assets/logos/RSTechLab-Logo.png" alt="RS Tech Lab" className="h-20 w-auto object-contain hidden md:block" />
           <div>
             <Chip label="IT · Education" />
             <h1 className="text-4xl font-black">RS Tech Lab</h1>
@@ -469,10 +469,13 @@ function CarsTab({ go }) {
       <section className="relative text-white py-24 px-6 overflow-hidden"
         style={{ backgroundImage: "url(./assets/cars/landcruiser.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="absolute inset-0 bg-red-950/80"></div>
-        <div className="relative max-w-7xl mx-auto">
-          <Chip label="Japan · Bangladesh · Export" />
-          <h1 className="text-5xl font-black mb-3">RS Cars</h1>
-          <p className="text-red-100 text-xl">Quality Japanese vehicles — sourced from auctions, delivered to your door</p>
+        <div className="relative max-w-7xl mx-auto flex items-center gap-8">
+          <img src="./assets/logos/RSCars-Logo.png" alt="RS Cars" className="h-24 w-auto object-contain hidden md:block drop-shadow-lg" />
+          <div>
+            <Chip label="Japan · Bangladesh · Export" />
+            <h1 className="text-5xl font-black mb-3">RS Cars</h1>
+            <p className="text-red-100 text-xl">Quality Japanese vehicles — sourced from auctions, delivered to your door</p>
+          </div>
         </div>
       </section>
 
@@ -598,10 +601,13 @@ function ElectronicsTab({ go }) {
       <section className="relative text-white py-24 px-6 overflow-hidden"
         style={{ backgroundImage: "url(./assets/images/electronics-hero.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="absolute inset-0 bg-purple-950/85"></div>
-        <div className="relative max-w-7xl mx-auto">
-          <Chip label="Local · Export · Wholesale" />
-          <h1 className="text-5xl font-black mb-3">RS Electronics</h1>
-          <p className="text-purple-200 text-xl">Quality electronics from Japan — for local use and export worldwide</p>
+        <div className="relative max-w-7xl mx-auto flex items-center gap-8">
+          <img src="./assets/logos/RSElectronics-Logo.png" alt="RS Electronics" className="h-24 w-auto object-contain hidden md:block drop-shadow-lg" />
+          <div>
+            <Chip label="Local · Export · Wholesale" />
+            <h1 className="text-5xl font-black mb-3">RS Electronics</h1>
+            <p className="text-purple-200 text-xl">Quality electronics from Japan — for local use and export worldwide</p>
+          </div>
         </div>
       </section>
 
@@ -646,10 +652,13 @@ function ToursTab({ go }) {
       <section className="relative text-white py-24 px-6 overflow-hidden"
         style={{ backgroundImage: "url(./assets/images/japan-hero.jpg)", backgroundSize: "cover", backgroundPosition: "center" }}>
         <div className="absolute inset-0 bg-emerald-950/80"></div>
-        <div className="relative max-w-7xl mx-auto">
-          <Chip label="Japan Travel · Consultancy" />
-          <h1 className="text-5xl font-black mb-3">RS Tours</h1>
-          <p className="text-emerald-100 text-xl">Experience Japan your way — guided by people who know it best</p>
+        <div className="relative max-w-7xl mx-auto flex items-center gap-8">
+          <img src="./assets/logos/RSTours-Logo.png" alt="RS Tours" className="h-24 w-auto object-contain hidden md:block drop-shadow-lg" />
+          <div>
+            <Chip label="Japan Travel · Consultancy" />
+            <h1 className="text-5xl font-black mb-3">RS Tours</h1>
+            <p className="text-emerald-100 text-xl">Experience Japan your way — guided by people who know it best</p>
+          </div>
         </div>
       </section>
 
