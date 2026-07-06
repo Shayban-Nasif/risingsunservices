@@ -172,7 +172,7 @@ function Nav({ active, go }) {
     <nav className="bg-white border-b sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <button onClick={() => navigate("home")} className="focus:outline-none">
-          <img src="./assets/logos/RS-Logo_nav.png" alt="Rising Sun Services" className="h-20 w-auto object-contain" />
+          <img src="./assets/logos/RS-Logo-ver-new.png" alt="Rising Sun Services" className="h-16 w-auto object-contain" />
         </button>
 
         {/* Desktop */}
@@ -221,7 +221,7 @@ function Footer({ go }) {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-5 gap-10 mb-10">
           <div className="md:col-span-2">
-            <img src="./assets/logos/RS-Logo_nav.png" alt="Rising Sun Services" className="h-12 w-auto object-contain mb-4" />
+            <img src="./assets/logos/RS-Logo-new.png" alt="Rising Sun Services" className="h-24 w-auto object-contain mb-4" />
             <p className="text-sm mb-4 leading-relaxed">
               Multi-domain business bridging Japan and the world — IT development, automotive, electronics, and tourism, all under one trusted brand.
             </p>
