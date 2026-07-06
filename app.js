@@ -172,7 +172,7 @@ function Nav({ active, go }) {
     <nav className="bg-white border-b sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <button onClick={() => navigate("home")} className="focus:outline-none">
-          <img src="./assets/logos/RS-Logo-ver-new.png" alt="Rising Sun Services" className="h-10 w-auto object-contain" />
+          <img src="./assets/logos/RS-Logo-ver-new.png?v=2" alt="Rising Sun Services" className="h-12 w-auto object-contain" />
         </button>
 
         {/* Desktop */}
