@@ -66,6 +66,41 @@ const itServices = [
   },
 ];
 
+const portfolioProjects = [
+  {
+    icon: "👤",
+    title: "Kabir Md Nasim Al Awal",
+    subtitle: "Personal Branding Website",
+    desc: "Personal branding site for a Data Center Technician at Microsoft — engineer, Bengali poet, and explorer based in Tokyo, Japan.",
+    url: "https://shayban-nasif.github.io/kabi-website/",
+    tags: ["Personal Branding", "Portfolio", "Tokyo"],
+  },
+  {
+    icon: "🏥",
+    title: "Dr. Nabina Rahman",
+    subtitle: "Professional Profile & Blog",
+    desc: "Professional profile and research blog for an Assistant Professor of Plastic & Reconstructive Surgery, showcasing published work and career highlights.",
+    url: "https://shayban-nasif.github.io/DrNabinaRahmanBlog/",
+    tags: ["Medical", "Blog", "Portfolio"],
+  },
+  {
+    icon: "🕌",
+    title: "Makki Masjid Gakuin",
+    subtitle: "Islamic Education Institution",
+    desc: "Full website for an Islamic school in Japan offering Hifz & Nazera programs — with course listings, parent testimonials, and multilingual support.",
+    url: "https://gakuin.makkimasjid.jp/",
+    tags: ["Education", "Institution", "Japan"],
+  },
+  {
+    icon: "🏢",
+    title: "Nojima International Co. Ltd.",
+    subtitle: "Corporate Multi-Service Website",
+    desc: "Multilingual corporate website for a Japan-based consulting firm offering real estate, visa support, SIM cards, car sales, and career services.",
+    url: "https://nojimaint.jp/en/",
+    tags: ["Corporate", "Multilingual", "Consulting"],
+  },
+];
+
 const roboticsCourses = [
   { level: "Beginner (Age 7–9)",    price: "¥30,000/month", duration: "3 months", topics: ["Intro to Robotics", "Block Programming", "Simple Circuits", "Basic Sensors"] },
   { level: "Intermediate (Age 10–12)", price: "¥35,000/month", duration: "3 months", topics: ["Arduino Basics", "Coding Fundamentals", "Motor Control", "LED Projects"] },
@@ -394,6 +429,32 @@ function TechLabTab({ go }) {
           <p className="text-sm text-blue-800 bg-blue-50 border border-blue-100 p-4 rounded-xl mt-8">
             <strong>Note:</strong> All prices are starting estimates. Final quote depends on requirements and project scope. Free initial consultation available.
           </p>
+        </div>
+      </section>
+
+      {/* Portfolio */}
+      <section className="py-20 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader title="Client Portfolio" subtitle="Real projects delivered — live websites built by RS Tech Lab" />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {portfolioProjects.map((p, i) => (
+              <a key={i} href={p.url} target="_blank" rel="noopener noreferrer"
+                className="group bg-gray-50 border border-gray-100 rounded-2xl p-6 hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col">
+                <div className="text-4xl mb-4">{p.icon}</div>
+                <h3 className="text-base font-black text-gray-900 mb-1 group-hover:text-blue-700 transition">{p.title}</h3>
+                <p className="text-xs font-bold text-blue-600 uppercase tracking-wider mb-3">{p.subtitle}</p>
+                <p className="text-gray-500 text-sm leading-relaxed flex-1">{p.desc}</p>
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {p.tags.map(t => (
+                    <span key={t} className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-medium">{t}</span>
+                  ))}
+                </div>
+                <div className="mt-4 text-blue-600 text-xs font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+                  Visit Site <span>→</span>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
