@@ -6,6 +6,14 @@ const WA_NUMBER = "818073072277";
 const WA_LINK = `https://wa.me/${WA_NUMBER}`;
 const EMAIL = "risingsunservices.jp@gmail.com";
 const QR_URL = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(WA_LINK)}&margin=10`;
+const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLScXs5pYJco-IS8WDxczFNcKQWyy9KWgTEjEFM-Gdifnbaz2eA/formResponse";
+const GOOGLE_FORM_ENTRIES = {
+  name: "entry.1161924968",
+  email: "entry.1208742533",
+  phone: "entry.525390",
+  subject: "entry.478878578",
+  message: "entry.131440110",
+};
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 const carWorkflow = [
@@ -771,12 +779,35 @@ function ToursTab({ go }) {
 function ContactTab() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSent(true);
+    setSending(true);
+    setError("");
+    try {
+      const body = new URLSearchParams({
+        [GOOGLE_FORM_ENTRIES.name]: form.name,
+        [GOOGLE_FORM_ENTRIES.email]: form.email,
+        [GOOGLE_FORM_ENTRIES.phone]: form.phone,
+        [GOOGLE_FORM_ENTRIES.subject]: form.subject,
+        [GOOGLE_FORM_ENTRIES.message]: form.message,
+      });
+      await fetch(GOOGLE_FORM_ACTION, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+      });
+      setSent(true);
+    } catch {
+      setError("Something went wrong. Please try WhatsApp instead.");
+    } finally {
+      setSending(false);
+    }
   };
 
   const inputCls = "w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-orange-400 outline-none transition bg-gray-50 focus:bg-white";
@@ -885,9 +916,12 @@ function ContactTab() {
                   <textarea value={form.message} onChange={set("message")} required rows={6} className={inputCls}
                     placeholder="Tell us your requirements, timeline, and any other details..." />
                 </div>
-                <button type="submit"
-                  className="w-full py-4 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-xl transition text-lg">
-                  Send Message →
+                {error && (
+                  <p className="text-sm text-red-600 font-semibold text-center">{error}</p>
+                )}
+                <button type="submit" disabled={sending}
+                  className="w-full py-4 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-black rounded-xl transition text-lg">
+                  {sending ? "Sending..." : "Send Message →"}
                 </button>
                 <p className="text-xs text-center text-gray-400">
                   Or reach us instantly on{" "}
