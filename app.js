@@ -1,4 +1,20 @@
-const { useState } = React;
+const { useState, useEffect } = React;
+
+// ─── FIREBASE ─────────────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyCP6jD2AVWiiygHDLmV5BqOAPyb9s0Jnc4",
+  authDomain: "rs-tours-1d55f.firebaseapp.com",
+  projectId: "rs-tours-1d55f",
+  storageBucket: "rs-tours-1d55f.firebasestorage.app",
+  messagingSenderId: "531219978632",
+  appId: "1:531219978632:web:4b6d8e58f3d17e8d7a423d",
+  measurementId: "G-KXZ17VEWCJ",
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const ADMIN_EMAIL = "risingsunservices.jp@gmail.com";
+const GUEST_DOMAIN = "guest.rstours";
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
 const PHONE = "+81 80-7307-2277";
@@ -173,6 +189,7 @@ function Nav({ active, go }) {
     { label: "RS Electronics", value: "electronics" },
     { label: "RS Tours",       value: "tours" },
     { label: "Contact",        value: "contact" },
+    { label: "Guest Login",    value: "guest" },
   ];
   const navigate = (v) => { go(v); setOpen(false); };
 
@@ -768,6 +785,10 @@ function ToursTab({ go }) {
                 Send Inquiry Form
               </button>
             </div>
+            <button onClick={() => go("guest")}
+              className="mt-6 text-emerald-200 hover:text-white text-sm font-bold underline underline-offset-4">
+              Already confirmed your tour? Guest Login →
+            </button>
           </div>
         </div>
       </section>
@@ -936,6 +957,316 @@ function ContactTab() {
   );
 }
 
+// ─── GUEST TAB ────────────────────────────────────────────────────────────────
+function resolveLoginEmail(username) {
+  const trimmed = username.trim();
+  return trimmed.includes("@") ? trimmed : `${trimmed}@${GUEST_DOMAIN}`;
+}
+
+// Event times are fixed to Japan Standard Time regardless of guest device timezone —
+// the tour happens in Japan, so "now" must be compared against JST, not local time.
+function toJstDate(dateStr, timeStr) {
+  return new Date(`${dateStr}T${timeStr}:00+09:00`);
+}
+
+function GuestLoginForm() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const inputCls = "w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none transition bg-gray-50 focus:bg-white";
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setBusy(true);
+    setError("");
+    try {
+      await auth.signInWithEmailAndPassword(resolveLoginEmail(username), password);
+    } catch (err) {
+      setError("Login failed. Check your username and password, or contact us on WhatsApp.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <section className="py-24 px-6 bg-gray-50 min-h-[70vh] flex items-center">
+      <div className="max-w-md mx-auto w-full">
+        <div className="text-center mb-8">
+          <div className="text-5xl mb-4">🗾</div>
+          <h1 className="text-3xl font-black text-gray-900">RS Guest Login</h1>
+          <p className="text-gray-500 mt-2">Enter the username and password we shared with you to view your tour plan.</p>
+        </div>
+        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8 space-y-5">
+          <div>
+            <label className="block text-sm font-bold mb-2 text-gray-700">Username</label>
+            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required
+              className={inputCls} placeholder="your username" autoCapitalize="none" />
+          </div>
+          <div>
+            <label className="block text-sm font-bold mb-2 text-gray-700">Password</label>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required
+              className={inputCls} placeholder="••••••••" />
+          </div>
+          {error && <p className="text-sm text-red-600 font-semibold text-center">{error}</p>}
+          <button type="submit" disabled={busy}
+            className="w-full py-3.5 bg-emerald-700 hover:bg-emerald-800 disabled:opacity-60 text-white font-black rounded-xl transition">
+            {busy ? "Logging in..." : "Login →"}
+          </button>
+          <p className="text-xs text-center text-gray-400">
+            Don't have login details yet? Contact us on{" "}
+            <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="text-green-600 font-bold hover:underline">WhatsApp</a>
+          </p>
+        </form>
+      </div>
+    </section>
+  );
+}
+
+function GuestDashboard({ user }) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const unsub = db.collection("guests").doc(user.email).onSnapshot((snap) => {
+      setData(snap.exists ? snap.data() : null);
+      setLoading(false);
+    });
+    return unsub;
+  }, [user.email]);
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const clockTime = now.toLocaleTimeString("en-GB", { timeZone: "Asia/Tokyo", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  const clockDate = now.toLocaleDateString("en-US", { timeZone: "Asia/Tokyo", weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+  if (loading) {
+    return <div className="py-24 text-center text-gray-400">Loading your tour plan...</div>;
+  }
+
+  if (!data || !data.itinerary || data.itinerary.length === 0) {
+    return (
+      <section className="py-24 px-6 bg-gray-50 min-h-[70vh]">
+        <div className="max-w-lg mx-auto text-center">
+          <div className="text-6xl mb-5">🧳</div>
+          <h2 className="text-2xl font-black text-gray-900 mb-2">Welcome{data?.guestName ? `, ${data.guestName}` : ""}!</h2>
+          <p className="text-gray-500 mb-8">Your tour plan is being prepared and will appear here soon.</p>
+          <button onClick={() => auth.signOut()} className="px-6 py-2.5 bg-gray-900 text-white rounded-xl font-bold text-sm">Sign Out</button>
+        </div>
+      </section>
+    );
+  }
+
+  const sorted = [...data.itinerary]
+    .map((it) => ({ ...it, at: toJstDate(it.date, it.time) }))
+    .sort((a, b) => a.at - b.at);
+
+  let currentIdx = -1;
+  sorted.forEach((it, i) => { if (it.at <= now) currentIdx = i; });
+
+  const days = [];
+  sorted.forEach((it, i) => {
+    const status = i < currentIdx ? "past" : i === currentIdx ? "current" : i === currentIdx + 1 ? "next" : "upcoming";
+    const entry = { ...it, status };
+    const day = days.find((d) => d.date === it.date);
+    if (day) day.items.push(entry);
+    else days.push({ date: it.date, items: [entry] });
+  });
+
+  return (
+    <div className="bg-gray-50 min-h-[70vh]">
+      {/* Live clock header */}
+      <section className="bg-gradient-to-br from-emerald-950 to-emerald-800 text-white py-14 px-6 text-center">
+        <p className="text-emerald-300 font-bold uppercase tracking-widest text-xs mb-2">Welcome{data.guestName ? `, ${data.guestName}` : ""}</p>
+        {data.tourTitle && <h1 className="text-3xl font-black mb-4">{data.tourTitle}</h1>}
+        <div className="text-5xl md:text-6xl font-black tabular-nums tracking-tight">{clockTime}</div>
+        <p className="text-emerald-200 mt-2">{clockDate} · Japan Standard Time</p>
+        <button onClick={() => auth.signOut()} className="mt-6 text-emerald-300 hover:text-white text-xs font-bold underline underline-offset-4">Sign Out</button>
+      </section>
+
+      {/* Itinerary */}
+      <section className="py-16 px-6">
+        <div className="max-w-3xl mx-auto space-y-10">
+          {days.map((day) => (
+            <div key={day.date}>
+              <h3 className="text-lg font-black text-gray-900 mb-4 sticky top-16 bg-gray-50/95 backdrop-blur py-1">
+                {new Date(`${day.date}T00:00:00+09:00`).toLocaleDateString("en-US", { timeZone: "Asia/Tokyo", weekday: "long", month: "long", day: "numeric" })}
+              </h3>
+              <div className="space-y-3">
+                {day.items.map((it, i) => {
+                  const styles = {
+                    current: "ring-2 ring-emerald-500 bg-emerald-50 shadow-lg scale-[1.02]",
+                    next: "border-l-4 border-orange-400 bg-orange-50",
+                    past: "opacity-50",
+                    upcoming: "bg-white",
+                  };
+                  return (
+                    <div key={i} className={`rounded-2xl p-5 flex gap-4 transition-all ${styles[it.status]}`}>
+                      <div className={`flex-shrink-0 font-black text-sm w-16 ${it.status === "past" ? "line-through" : ""}`}>{it.time}</div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h4 className="font-black text-gray-900">{it.title}</h4>
+                          {it.status === "current" && (
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                              <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full animate-pulse"></span> NOW
+                            </span>
+                          )}
+                          {it.status === "next" && (
+                            <span className="text-xs font-bold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full">UP NEXT</span>
+                          )}
+                        </div>
+                        {it.location && <p className="text-sm text-gray-500 mt-1">📍 {it.location}</p>}
+                        {it.notes && <p className="text-sm text-gray-400 mt-1">{it.notes}</p>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function AdminPanel() {
+  const [guests, setGuests] = useState([]);
+  const [email, setEmailField] = useState("");
+  const [guestName, setGuestName] = useState("");
+  const [tourTitle, setTourTitle] = useState("");
+  const [itineraryJson, setItineraryJson] = useState("");
+  const [status, setStatus] = useState("");
+
+  useEffect(() => {
+    const unsub = db.collection("guests").onSnapshot((snap) => {
+      setGuests(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+    });
+    return unsub;
+  }, []);
+
+  const loadGuest = (g) => {
+    setEmailField(g.id);
+    setGuestName(g.guestName || "");
+    setTourTitle(g.tourTitle || "");
+    setItineraryJson(JSON.stringify(g.itinerary || [], null, 2));
+    setStatus("");
+  };
+
+  const clearForm = () => {
+    setEmailField(""); setGuestName(""); setTourTitle(""); setItineraryJson(""); setStatus("");
+  };
+
+  const handleSave = async () => {
+    setStatus("");
+    if (!email.trim()) { setStatus("Guest email/username is required."); return; }
+    let itinerary;
+    try {
+      itinerary = itineraryJson.trim() ? JSON.parse(itineraryJson) : [];
+    } catch {
+      setStatus("Itinerary JSON is invalid — check formatting.");
+      return;
+    }
+    try {
+      await db.collection("guests").doc(resolveLoginEmail(email)).set({
+        guestName, tourTitle, itinerary,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      setStatus("Saved ✓");
+    } catch (err) {
+      setStatus("Save failed: " + err.message);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!confirm(`Delete guest plan for ${id}?`)) return;
+    await db.collection("guests").doc(id).delete();
+    if (email === id) clearForm();
+  };
+
+  const inputCls = "w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none transition bg-gray-50 focus:bg-white";
+
+  return (
+    <section className="py-16 px-6 bg-gray-50 min-h-[70vh]">
+      <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8">
+        <div className="md:col-span-1">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-black text-gray-800">Guests</h3>
+            <button onClick={() => auth.signOut()} className="text-xs font-bold text-gray-400 hover:text-gray-700 underline">Sign Out</button>
+          </div>
+          <div className="space-y-2">
+            {guests.length === 0 && <p className="text-sm text-gray-400">No guest plans yet.</p>}
+            {guests.map((g) => (
+              <div key={g.id} className="bg-white rounded-xl p-4 shadow-sm flex items-center justify-between gap-2">
+                <button onClick={() => loadGuest(g)} className="text-left flex-1">
+                  <div className="font-bold text-sm text-gray-900">{g.guestName || g.id}</div>
+                  <div className="text-xs text-gray-400 truncate">{g.tourTitle || g.id}</div>
+                </button>
+                <button onClick={() => handleDelete(g.id)} className="text-red-400 hover:text-red-600 text-xs font-bold">✕</button>
+              </div>
+            ))}
+          </div>
+          <button onClick={clearForm} className="mt-4 text-sm font-bold text-emerald-700 hover:underline">+ New Guest Plan</button>
+        </div>
+
+        <div className="md:col-span-2 bg-white rounded-2xl shadow-md p-8 space-y-5">
+          <h3 className="font-black text-gray-800 text-lg">Guest Plan</h3>
+          <div className="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-sm font-bold mb-2 text-gray-700">Guest Username/Email *</label>
+              <input type="text" value={email} onChange={(e) => setEmailField(e.target.value)} className={inputCls} placeholder="e.g. tanaka2026" />
+              <p className="text-xs text-gray-400 mt-1">Must match the username used to create their Firebase login.</p>
+            </div>
+            <div>
+              <label className="block text-sm font-bold mb-2 text-gray-700">Guest Display Name</label>
+              <input type="text" value={guestName} onChange={(e) => setGuestName(e.target.value)} className={inputCls} placeholder="e.g. Tanaka Family" />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-bold mb-2 text-gray-700">Tour Title</label>
+            <input type="text" value={tourTitle} onChange={(e) => setTourTitle(e.target.value)} className={inputCls} placeholder="e.g. 5-Day Tokyo & Fuji Family Tour" />
+          </div>
+          <div>
+            <label className="block text-sm font-bold mb-2 text-gray-700">Itinerary JSON</label>
+            <textarea value={itineraryJson} onChange={(e) => setItineraryJson(e.target.value)} rows={14}
+              className={`${inputCls} font-mono text-xs`}
+              placeholder={`[\n  { "date": "2026-08-01", "time": "09:00", "title": "Airport Pickup", "location": "Narita Airport", "notes": "Driver holds RS Tours sign" },\n  { "date": "2026-08-01", "time": "13:00", "title": "Hotel Check-in", "location": "Shinjuku" }\n]`} />
+            <p className="text-xs text-gray-400 mt-1">Paste the JSON block provided for this guest's plan.</p>
+          </div>
+          {status && <p className={`text-sm font-semibold ${status.startsWith("Saved") ? "text-emerald-600" : "text-red-600"}`}>{status}</p>}
+          <button onClick={handleSave} className="w-full py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-black rounded-xl transition">
+            Save Guest Plan
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function GuestTab() {
+  const [user, setUser] = useState(undefined); // undefined = loading, null = logged out
+
+  useEffect(() => {
+    return auth.onAuthStateChanged(setUser);
+  }, []);
+
+  if (user === undefined) {
+    return <div className="py-24 text-center text-gray-400">Loading...</div>;
+  }
+  if (!user) {
+    return <GuestLoginForm />;
+  }
+  if (user.email === ADMIN_EMAIL) {
+    return <AdminPanel />;
+  }
+  return <GuestDashboard user={user} />;
+}
+
 // ─── APP ROOT ─────────────────────────────────────────────────────────────────
 function App() {
   const [active, setActive] = useState("home");
@@ -956,6 +1287,7 @@ function App() {
         {active === "electronics" && <ElectronicsTab go={go} />}
         {active === "tours"       && <ToursTab       go={go} />}
         {active === "contact"     && <ContactTab />}
+        {active === "guest"       && <GuestTab />}
       </main>
       <Footer go={go} />
     </div>
