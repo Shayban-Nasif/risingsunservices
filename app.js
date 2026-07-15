@@ -1186,7 +1186,7 @@ function AdminPanel() {
   const handleDelete = async (id) => {
     if (!confirm(`Delete guest plan for ${id}?`)) return;
     await db.collection("guests").doc(id).delete();
-    if (email === id) clearForm();
+    if (resolveLoginEmail(email) === id) clearForm();
   };
 
   const inputCls = "w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 outline-none transition bg-gray-50 focus:bg-white";
@@ -1242,6 +1242,15 @@ function AdminPanel() {
           <button onClick={handleSave} className="w-full py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-black rounded-xl transition">
             Save Guest Plan
           </button>
+          {email.trim() && (
+            <button onClick={() => handleDelete(resolveLoginEmail(email))}
+              className="w-full py-2.5 border border-red-200 text-red-600 hover:bg-red-50 font-bold rounded-xl transition text-sm">
+              Remove Guest Plan
+            </button>
+          )}
+          <p className="text-xs text-gray-400">
+            This removes the guest's tour data only. To fully revoke their login, delete the user in Firebase Console → Authentication.
+          </p>
         </div>
       </div>
     </section>
